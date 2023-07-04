@@ -1,19 +1,7 @@
-# Java Template
+# Chess Engine
 
-An empty template for new Java projects.
-
-Sets up:
- * JAR with dependencies,
- * Log4J,
- * JUnit and Mockito,
- * Github Action for releases.
-
-After checking out the template, you need to replace:
- * [ARTIFACT-ID],
- * [PROJECT-NAME],
- * [GITHUB-URL], and
- * [MAIN-CLASS]
-
-in
- * pom.xml, and
- * .github/workflows/create-release.yml.
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=dusan-rychnovsky_chess-engine&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=dusan-rychnovsky_chess-engine)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=dusan-rychnovsky_chess-engine&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=dusan-rychnovsky_chess-engine)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dusan-rychnovsky_chess-engine&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=dusan-rychnovsky_chess-engine)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=dusan-rychnovsky_chess-engine&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=dusan-rychnovsky_chess-engine)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=dusan-rychnovsky_chess-engine&metric=bugs)](https://sonarcloud.io/summary/new_code?id=dusan-rychnovsky_chess-engine)
