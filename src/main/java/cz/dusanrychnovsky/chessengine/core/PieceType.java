@@ -10,7 +10,7 @@ import static cz.dusanrychnovsky.chessengine.core.Position.getAllRow;
  */
 public enum PieceType {
 
-  Rook {
+  ROOK {
     /**
      * @return All moves a rook can make on an empty chessboard from the given
      * position. A rook can move to all positions in the same column and
@@ -26,35 +26,35 @@ public enum PieceType {
     }
   },
 
-  Knight{
+  KNIGHT {
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
       throw new UnsupportedOperationException("Not yet implemented");
     }
   },
 
-  Bishop{
+  BISHOP {
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
       throw new UnsupportedOperationException("Not yet implemented");
     }
   },
 
-  Queen{
+  QUEEN {
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
       throw new UnsupportedOperationException("Not yet implemented");
     }
   },
 
-  King{
+  KING {
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
       throw new UnsupportedOperationException("Not yet implemented");
     }
   },
 
-  Pawn{
+  PAWN {
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
       throw new UnsupportedOperationException("Not yet implemented");

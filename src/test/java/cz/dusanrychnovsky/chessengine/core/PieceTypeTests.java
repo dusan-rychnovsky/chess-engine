@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static cz.dusanrychnovsky.chessengine.core.PieceType.Rook;
+import static cz.dusanrychnovsky.chessengine.core.PieceType.ROOK;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static org.junit.Assert.assertEquals;
 
@@ -13,7 +13,7 @@ public class PieceTypeTests {
 
   @Test
   public void rookMovesShouldContainFullRowAndColumn() {
-    var result = Rook.getMovesFromPosition(D3).collect(Collectors.toSet());
+    var result = ROOK.getMovesFromPosition(D3).collect(Collectors.toSet());
     assertEquals(
       Set.of(
         new Move(D3, D1),
