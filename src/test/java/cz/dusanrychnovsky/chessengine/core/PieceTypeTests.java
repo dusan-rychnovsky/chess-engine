@@ -3,18 +3,16 @@ package cz.dusanrychnovsky.chessengine.core;
 import org.junit.Test;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
-import static org.junit.Assert.assertEquals;
+import static cz.dusanrychnovsky.chessengine.util.AssertExtensions.assertStreamSetEquals;
 
 public class PieceTypeTests {
 
   @Test
   public void rookMovesShouldContainFullRowAndColumn() {
-    var result = ROOK.getMovesFromPosition(D3).collect(Collectors.toSet());
-    assertEquals(
+    assertStreamSetEquals(
       Set.of(
         // column
         new Move(D3, D1), new Move(D3, D2), new Move(D3, D4),
@@ -23,13 +21,12 @@ public class PieceTypeTests {
         new Move(D3, A3), new Move(D3, B3), new Move(D3, C3),
         new Move(D3, E3), new Move(D3, F3), new Move(D3, G3), new Move(D3, H3)
       ),
-      result);
+      ROOK.getMovesFromPosition(D3));
   }
 
   @Test
   public void bishopMovesShouldContainBothDiagonals() {
-    var result = BISHOP.getMovesFromPosition(D3).collect(Collectors.toSet());
-    assertEquals(
+    assertStreamSetEquals(
       Set.of(
         // right diagonal
         new Move(D3, B1), new Move(D3, C2), new Move(D3, E4), new Move(D3, F5),
@@ -38,13 +35,12 @@ public class PieceTypeTests {
         new Move(D3, F1), new Move(D3, E2), new Move(D3, C4), new Move(D3, B5),
         new Move(D3, A6)
       ),
-      result);
+      BISHOP.getMovesFromPosition(D3));
   }
 
   @Test
   public void queenMovesShouldContainFullRowAndColumnAndBothDiagonals() {
-    var result = QUEEN.getMovesFromPosition(D3).collect(Collectors.toSet());
-    assertEquals(
+    assertStreamSetEquals(
       Set.of(
         // column
         new Move(D3, D1), new Move(D3, D2), new Move(D3, D4),
@@ -59,7 +55,7 @@ public class PieceTypeTests {
         new Move(D3, F1), new Move(D3, E2), new Move(D3, C4), new Move(D3, B5),
         new Move(D3, A6)
       ),
-      result
+      QUEEN.getMovesFromPosition(D3)
     );
   }
 }
