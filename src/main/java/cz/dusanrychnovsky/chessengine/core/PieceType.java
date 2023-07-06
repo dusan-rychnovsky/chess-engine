@@ -1,5 +1,7 @@
 package cz.dusanrychnovsky.chessengine.core;
 
+import cz.dusanrychnovsky.chessengine.util.StreamExtensions;
+
 import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
@@ -49,9 +51,21 @@ public enum PieceType {
   },
 
   QUEEN {
+    /**
+     * @return All moves a queen can make on an empty chessboard from
+     * the given position. A queen can move to all positions in the same
+     * column and the same row, as well as diagonally, except the position
+     * on which it's already standing.
+     */
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
-      throw new UnsupportedOperationException("Not yet implemented");
+      var allColumn = getAllColumn(position.getColumn());
+      var allRow = getAllRow(position.getRow());
+      var rightDiagonal = getAllRightDiagonal(position);
+      var leftDiagonal = getAllLeftDiagonal(position);
+      return StreamExtensions.concat(allColumn, allRow, rightDiagonal, leftDiagonal)
+        .filter(pos -> pos != position)
+        .map(pos -> new Move(position, pos));
     }
   },
 
