@@ -1,5 +1,7 @@
 package cz.dusanrychnovsky.chessengine.core;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Column.*;
@@ -48,6 +50,69 @@ public enum Position {
   public static Stream<Position> getAllRow(Row row) {
     return Stream.of(Column.values())
       .map(column -> get(column, row));
+  }
+
+  /**
+   * @return All positions in the right diagonal which goes through
+   * the given position - that is, the diagonal that goes top right
+   * and bottom left.
+   */
+  public static Stream<Position> getAllRightDiagonal(Position pos) {
+    var result = new HashSet<Position>();
+
+    // top-right
+    var col = Optional.of(pos.getColumn());
+    var row = Optional.of(pos.getRow());
+    do {
+      result.add(Position.get(col.get(), row.get()));
+      col = col.get().getNext();
+      row = row.get().getNext();
+    }
+    while (col.isPresent() && row.isPresent());
+
+    // bottom-left
+    col = Optional.of(pos.getColumn());
+    row = Optional.of(pos.getRow());
+    do {
+      result.add(Position.get(col.get(), row.get()));
+      col = col.get().getPrevious();
+      row = row.get().getPrevious();
+    }
+    while (col.isPresent() && row.isPresent());
+
+    return result.stream();
+  }
+
+  /**
+   * @return All positions in the left diagonal which goes through
+   * the given position - that is, the diagonal that goes top left
+   * and bottom right.
+   */
+  public static Stream<Position> getAllLeftDiagonal(Position pos) {
+
+    var result = new HashSet<Position>();
+
+    // top-left
+    var col = Optional.of(pos.getColumn());
+    var row = Optional.of(pos.getRow());
+    do {
+      result.add(Position.get(col.get(), row.get()));
+      col = col.get().getPrevious();
+      row = row.get().getNext();
+    }
+    while (col.isPresent() && row.isPresent());
+
+    // bottom-left
+    col = Optional.of(pos.getColumn());
+    row = Optional.of(pos.getRow());
+    do {
+      result.add(Position.get(col.get(), row.get()));
+      col = col.get().getNext();
+      row = row.get().getPrevious();
+    }
+    while (col.isPresent() && row.isPresent());
+
+    return result.stream();
   }
 
   public Column getColumn() {

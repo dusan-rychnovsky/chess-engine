@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static cz.dusanrychnovsky.chessengine.core.PieceType.BISHOP;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.ROOK;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static org.junit.Assert.assertEquals;
@@ -30,6 +31,26 @@ public class PieceTypeTests {
         new Move(D3, F3),
         new Move(D3, G3),
         new Move(D3, H3)),
+      result);
+  }
+
+  @Test
+  public void bishopMovesShouldContainBothDiagonals() {
+    var result = BISHOP.getMovesFromPosition(D3).collect(Collectors.toSet());
+    assertEquals(
+      Set.of(
+        new Move(D3, B1),
+        new Move(D3, C2),
+        new Move(D3, E4),
+        new Move(D3, F5),
+        new Move(D3, G6),
+        new Move(D3, H7),
+        new Move(D3, F1),
+        new Move(D3, E2),
+        new Move(D3, C4),
+        new Move(D3, B5),
+        new Move(D3, A6)
+      ),
       result);
   }
 }

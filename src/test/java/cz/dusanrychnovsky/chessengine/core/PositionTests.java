@@ -28,4 +28,16 @@ public class PositionTests {
     var result = Position.getAllRow(R3).collect(Collectors.toSet());
     assertEquals(Set.of(A3, B3, C3, D3, E3, F3, G3, H3), result);
   }
+
+  @Test
+  public void getAllRightDiagonalShouldReturnAllPositionsInTheRightDiagonalWhichGoesThroughTheGivenPosition() {
+    var result = Position.getAllRightDiagonal(D2).collect(Collectors.toSet());
+    assertEquals(Set.of(C1, D2, E3, F4, G5, H6), result);
+  }
+
+  @Test
+  public void getAllLeftDiagonalShouldReturnAllPositionsInTheLeftDiagonalWhichGOesThroughTheGivenPosition() {
+    var result = Position.getAllLeftDiagonal(D2).collect(Collectors.toSet());
+    assertEquals(Set.of(E1, D2, C3, B4, A5), result);
+  }
 }

@@ -2,8 +2,7 @@ package cz.dusanrychnovsky.chessengine.core;
 
 import java.util.stream.Stream;
 
-import static cz.dusanrychnovsky.chessengine.core.Position.getAllColumn;
-import static cz.dusanrychnovsky.chessengine.core.Position.getAllRow;
+import static cz.dusanrychnovsky.chessengine.core.Position.*;
 
 /**
  * Represents type of chess piece.
@@ -34,9 +33,18 @@ public enum PieceType {
   },
 
   BISHOP {
+    /**
+     * @return All moves a bishop can make on an empty chessboard from
+     * the given position. A bishop can move to all positions diagonally,
+     * except the position on which it's already standing.
+     */
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
-      throw new UnsupportedOperationException("Not yet implemented");
+      var rightDiagonal = getAllRightDiagonal(position);
+      var leftDiagonal = getAllLeftDiagonal(position);
+      return Stream.concat(rightDiagonal, leftDiagonal)
+        .filter(pos -> pos != position)
+        .map(pos -> new Move(position, pos));
     }
   },
 
