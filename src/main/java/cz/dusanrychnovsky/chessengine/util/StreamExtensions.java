@@ -3,6 +3,11 @@ package cz.dusanrychnovsky.chessengine.util;
 import java.util.stream.Stream;
 
 public class StreamExtensions {
+
+  private StreamExtensions() {
+    throw new UnsupportedOperationException("Static utility class.");
+  }
+
   /**
    * @return {@link Stream#concat} applied iteratively over the given array
    * of streams.
