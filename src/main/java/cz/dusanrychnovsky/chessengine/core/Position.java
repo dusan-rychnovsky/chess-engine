@@ -115,6 +115,36 @@ public enum Position {
     return result.stream();
   }
 
+  /**
+   * @return All positions which are adjacent with the given position.
+   */
+  public static Stream<Position> getAllAdjacent(Position position) {
+    return getAllAdjacent(position.getColumn(), position.getRow());
+  }
+
+  private static Stream<Position> getAllAdjacent(Column col, Row row) {
+    var fromRow = row.getPrevious().orElse(row);
+    var toRow = row.getNext().orElse(row);
+    var fromCol = col.getPrevious().orElse(col);
+    var toCol = col.getNext().orElse(col);
+
+    var result = new HashSet<Position>();
+    for (var c = fromCol; ; c = c.getNext().get()) {
+      for (var r = fromRow; ; r = r.getNext().get()) {
+        if (r != row || c != col) {
+          result.add(Position.get(c, r));
+        }
+        if (r == toRow) {
+          break;
+        }
+      }
+      if (c == toCol) {
+        break;
+      }
+    }
+    return result.stream();
+  }
+
   public Column getColumn() {
     return this.column;
   }

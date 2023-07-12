@@ -58,4 +58,16 @@ public class PieceTypeTests {
       QUEEN.getMovesFromPosition(D3)
     );
   }
+
+  @Test
+  public void kingMovesShouldContainAllAdjacentFields() {
+    assertStreamSetEquals(
+      Set.of(
+        new Move(D3, C4), new Move(D3, D4), new Move(D3, E4),
+        new Move(D3, C3), new Move(D3, E3),
+        new Move(D3, C2), new Move(D3, D2), new Move(D3, E2)
+      ),
+      KING.getMovesFromPosition(D3)
+    );
+  }
 }

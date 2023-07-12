@@ -70,9 +70,14 @@ public enum PieceType {
   },
 
   KING {
+    /**
+     * @return All moves a king can make on an empty chessboard from
+     * the given position. A king can move to all adjacent fields.
+     */
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
-      throw new UnsupportedOperationException("Not yet implemented");
+      return Position.getAllAdjacent(position)
+        .map(pos -> new Move(position, pos));
     }
   },
 

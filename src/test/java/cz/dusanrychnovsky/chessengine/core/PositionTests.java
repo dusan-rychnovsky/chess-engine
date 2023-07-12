@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import static cz.dusanrychnovsky.chessengine.core.Column.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.R3;
+import static cz.dusanrychnovsky.chessengine.util.AssertExtensions.assertStreamSetEquals;
 import static org.junit.Assert.assertEquals;
 
 public class PositionTests {
@@ -19,25 +20,36 @@ public class PositionTests {
 
   @Test
   public void getAllColumShouldReturnAllPositionsInGivenColumn() {
-    var result = Position.getAllColumn(CC).collect(Collectors.toSet());
-    assertEquals(Set.of(C1, C2, C3, C4, C5, C6, C7, C8), result);
+    assertStreamSetEquals(Set.of(C1, C2, C3, C4, C5, C6, C7, C8), Position.getAllColumn(CC));
   }
 
   @Test
   public void getAllRowShouldReturnAllPositionsInGivenRow() {
-    var result = Position.getAllRow(R3).collect(Collectors.toSet());
-    assertEquals(Set.of(A3, B3, C3, D3, E3, F3, G3, H3), result);
+    assertStreamSetEquals(Set.of(A3, B3, C3, D3, E3, F3, G3, H3), Position.getAllRow(R3));
   }
 
   @Test
   public void getAllRightDiagonalShouldReturnAllPositionsInTheRightDiagonalWhichGoesThroughTheGivenPosition() {
-    var result = Position.getAllRightDiagonal(D2).collect(Collectors.toSet());
-    assertEquals(Set.of(C1, D2, E3, F4, G5, H6), result);
+    assertStreamSetEquals(Set.of(C1, D2, E3, F4, G5, H6), Position.getAllRightDiagonal(D2));
   }
 
   @Test
   public void getAllLeftDiagonalShouldReturnAllPositionsInTheLeftDiagonalWhichGOesThroughTheGivenPosition() {
-    var result = Position.getAllLeftDiagonal(D2).collect(Collectors.toSet());
-    assertEquals(Set.of(E1, D2, C3, B4, A5), result);
+    assertStreamSetEquals(Set.of(E1, D2, C3, B4, A5), Position.getAllLeftDiagonal(D2));
+  }
+
+  @Test
+  public void getAllAdjacentFromChessboardCornerShouldReturnThreePositions() {
+    assertStreamSetEquals(Set.of(A2, B2, B1), Position.getAllAdjacent(A1));
+  }
+
+  @Test
+  public void getAllAdjacentFromChessboardSideShouldReturnFivePositions() {
+    assertStreamSetEquals(Set.of(H3, G3, G4, G5, H5), Position.getAllAdjacent(H4));
+  }
+
+  @Test
+  public void getAllAdjacentFromChessboardMiddleShouldReturnEightPositions() {
+    assertStreamSetEquals(Set.of(B7, C7, D7, B6, D6, B5, C5, D5), Position.getAllAdjacent(C6));
   }
 }
