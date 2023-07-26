@@ -101,8 +101,8 @@ public enum Position {
     var toCol = col.getNext().orElse(col);
 
     var result = new HashSet<Position>();
-    for (var c = fromCol; ; c = c.getNext().get()) {
-      for (var r = fromRow; ; r = r.getNext().get()) {
+    for (var c = fromCol; ; c = c.getNext().orElseThrow()) {
+      for (var r = fromRow; ; r = r.getNext().orElseThrow()) {
         if (r != row || c != col) {
           result.add(Position.get(c, r));
         }
