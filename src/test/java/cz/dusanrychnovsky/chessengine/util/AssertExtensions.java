@@ -1,7 +1,7 @@
 package cz.dusanrychnovsky.chessengine.util;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -14,6 +14,8 @@ public class AssertExtensions {
   }
 
   public static <T> void assertStreamSetEquals(Set<T> expected, Stream<T> actual) {
-    assertEquals(expected, actual.collect(Collectors.toSet()));
+    var actualList = actual.toList();
+    assertEquals(expected.size(), actualList.size());
+    assertEquals(expected, new HashSet<>(actualList));
   }
 }

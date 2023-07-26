@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Column.*;
+import static cz.dusanrychnovsky.chessengine.core.Direction.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
 
 /**
@@ -40,16 +41,14 @@ public enum Position {
    * @return All positions in the given column.
    */
   public static Stream<Position> getAllColumn(Column column) {
-    return Stream.of(Row.values())
-      .map(row -> get(column, row));
+    return getAllInDirection(get(column, R1), top());
   }
 
   /**
    * @return All positions in the given row.
    */
   public static Stream<Position> getAllRow(Row row) {
-    return Stream.of(Column.values())
-      .map(column -> get(column, row));
+    return getAllInDirection(get(CA, row), right());
   }
 
   /**
@@ -58,29 +57,11 @@ public enum Position {
    * and bottom left.
    */
   public static Stream<Position> getAllRightDiagonal(Position pos) {
-    var result = new HashSet<Position>();
-
-    // top-right
-    var col = Optional.of(pos.getColumn());
-    var row = Optional.of(pos.getRow());
-    do {
-      result.add(Position.get(col.get(), row.get()));
-      col = col.get().getNext();
-      row = row.get().getNext();
-    }
-    while (col.isPresent() && row.isPresent());
-
-    // bottom-left
-    col = Optional.of(pos.getColumn());
-    row = Optional.of(pos.getRow());
-    do {
-      result.add(Position.get(col.get(), row.get()));
-      col = col.get().getPrevious();
-      row = row.get().getPrevious();
-    }
-    while (col.isPresent() && row.isPresent());
-
-    return result.stream();
+    return Stream.concat(
+      getAllInDirection(pos, topRight()),
+      getAllInDirection(pos, bottomLeft())
+        .filter(p -> p != pos)
+    );
   }
 
   /**
@@ -89,29 +70,20 @@ public enum Position {
    * and bottom right.
    */
   public static Stream<Position> getAllLeftDiagonal(Position pos) {
+    return Stream.concat(
+      getAllInDirection(pos, topLeft()),
+      getAllInDirection(pos, bottomRight())
+        .filter(p -> p != pos)
+    );
+  }
 
+  private static Stream<Position> getAllInDirection(Position from, Direction direction) {
     var result = new HashSet<Position>();
-
-    // top-left
-    var col = Optional.of(pos.getColumn());
-    var row = Optional.of(pos.getRow());
-    do {
-      result.add(Position.get(col.get(), row.get()));
-      col = col.get().getPrevious();
-      row = row.get().getNext();
+    var pos = Optional.of(from);
+    while (pos.isPresent()) {
+      result.add(pos.get());
+      pos = direction.apply(pos.get());
     }
-    while (col.isPresent() && row.isPresent());
-
-    // bottom-left
-    col = Optional.of(pos.getColumn());
-    row = Optional.of(pos.getRow());
-    do {
-      result.add(Position.get(col.get(), row.get()));
-      col = col.get().getNext();
-      row = row.get().getPrevious();
-    }
-    while (col.isPresent() && row.isPresent());
-
     return result.stream();
   }
 
