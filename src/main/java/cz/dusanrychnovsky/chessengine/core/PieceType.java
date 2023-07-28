@@ -31,6 +31,10 @@ public enum PieceType {
   },
 
   KNIGHT {
+    /**
+     * @return All moves a knight can make on an empty chessboard from
+     * the given position. A knight can move in L-shaped pattern.
+     */
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
       var directions = new ArrayList<List<Direction>>();
