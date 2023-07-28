@@ -2,8 +2,7 @@ package cz.dusanrychnovsky.chessengine.core;
 
 import cz.dusanrychnovsky.chessengine.util.StreamExtensions;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Direction.*;
@@ -34,16 +33,13 @@ public enum PieceType {
   KNIGHT {
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
-      var directions = asList(
-        asList(right(), top(), top()),
-        asList(top(), right(), right()),
-        asList(bottom(), right(), right()),
-        asList(right(), bottom(), bottom()),
-        asList(left(), top(), top()),
-        asList(top(), left(), left()),
-        asList(bottom(), left(), left()),
-        asList(left(), bottom(), bottom())
-      );
+      var directions = new ArrayList<List<Direction>>();
+      for (var horizontal : new Direction[] { left(), right() }) {
+        for (var vertical : new Direction[] { top(), bottom() }) {
+          directions.add(asList(horizontal, horizontal, vertical));
+          directions.add(asList(vertical, vertical, horizontal));
+        }
+      }
       return directions.stream()
         .map(position::apply)
         .filter(Optional::isPresent)
