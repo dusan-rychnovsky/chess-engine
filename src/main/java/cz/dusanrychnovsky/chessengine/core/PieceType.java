@@ -2,9 +2,13 @@ package cz.dusanrychnovsky.chessengine.core;
 
 import cz.dusanrychnovsky.chessengine.util.StreamExtensions;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import static cz.dusanrychnovsky.chessengine.core.Direction.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
+import static java.util.Arrays.asList;
 
 /**
  * Represents type of chess piece.
@@ -30,7 +34,20 @@ public enum PieceType {
   KNIGHT {
     @Override
     public Stream<Move> getMovesFromPosition(Position position) {
-      throw new UnsupportedOperationException("Not yet implemented");
+      var directions = asList(
+        asList(right(), top(), top()),
+        asList(top(), right(), right()),
+        asList(bottom(), right(), right()),
+        asList(right(), bottom(), bottom()),
+        asList(left(), top(), top()),
+        asList(top(), left(), left()),
+        asList(bottom(), left(), left()),
+        asList(left(), bottom(), bottom())
+      );
+      return directions.stream()
+        .map(position::apply)
+        .filter(Optional::isPresent)
+        .map(pos -> new Move(position, pos.get()));
     }
   },
 

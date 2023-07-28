@@ -2,10 +2,11 @@ package cz.dusanrychnovsky.chessengine.core;
 
 import org.junit.Test;
 
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static cz.dusanrychnovsky.chessengine.core.Column.*;
+import static cz.dusanrychnovsky.chessengine.core.Direction.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.R3;
 import static cz.dusanrychnovsky.chessengine.util.AssertExtensions.assertStreamSetEquals;
@@ -51,5 +52,20 @@ public class PositionTests {
   @Test
   public void getAllAdjacentFromChessboardMiddleShouldReturnEightPositions() {
     assertStreamSetEquals(Set.of(B7, C7, D7, B6, D6, B5, C5, D5), Position.getAllAdjacent(C6));
+  }
+
+  @Test
+  public void applyShouldReturnNextPositionInGivenDirection() {
+    assertEquals(Optional.of(C3), C2.apply(top()));
+  }
+
+  @Test
+  public void applyShouldReturnEmptyResultWhenNextPositionInGivenDirectionIsOutOfChessboard() {
+    assertEquals(Optional.empty(), H1.apply(topRight()));
+  }
+
+  @Test
+  public void applyShouldReturnFinalPositionWhenApplyingMultipleDirections() {
+    assertEquals(Optional.of(G5), E2.apply(right(), top(), top(), topRight()));
   }
 }

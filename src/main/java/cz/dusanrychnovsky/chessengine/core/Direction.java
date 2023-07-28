@@ -35,10 +35,24 @@ public interface Direction {
   }
 
   /**
+   * @return vertical direction (top to bottom)
+   */
+  static Direction bottom() {
+    return Direction.get(Optional::of, Navigable::getPrevious);
+  }
+
+  /**
    * @return horizontal direction (left to right)
    */
   static Direction right() {
     return Direction.get(Navigable::getNext, Optional::of);
+  }
+
+  /**
+   * @return horizontal direction (right to left)
+   */
+  static Direction left() {
+    return Direction.get(Navigable::getPrevious, Optional::of);
   }
 
   /**

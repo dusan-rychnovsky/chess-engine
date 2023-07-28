@@ -70,4 +70,54 @@ public class PieceTypeTests {
       KING.getMovesFromPosition(D3)
     );
   }
+
+  @Test
+  public void knightMovesShouldContainEightPositionsFromChessboardCenter() {
+    assertStreamSetEquals(
+      Set.of(
+        new Move(C5, D7), new Move(C5, E6), new Move(C5, E4), new Move(C5, D3),
+        new Move(C5, B3), new Move(C5, A4), new Move(C5, A6), new Move(C5, B7)
+      ),
+      KNIGHT.getMovesFromPosition(C5)
+    );
+  }
+
+  @Test
+  public void knightMovesShouldContainTwoPositionsFromChessboardCorner() {
+    assertStreamSetEquals(
+      Set.of(new Move(A1, B3), new Move(A1, C2)),
+      KNIGHT.getMovesFromPosition(A1)
+    );
+  }
+
+  @Test
+  public void knightMovesShouldContainFourPositionsFromChessboardEdge() {
+    assertStreamSetEquals(
+      Set.of(
+        new Move(H5, G7), new Move(H5, F6), new Move(H5, F4), new Move(H5, G3)
+      ),
+      KNIGHT.getMovesFromPosition(H5)
+    );
+  }
+
+  @Test
+  public void knightMovesShouldContainSixPositionsNearChessboardEdge() {
+    assertStreamSetEquals(
+      Set.of(
+        new Move(E7, G8), new Move(E7, G6), new Move(E7, F5),
+        new Move(E7, D5), new Move(E7, C6), new Move(E7, C8)
+      ),
+      KNIGHT.getMovesFromPosition(E7)
+    );
+  }
+
+  @Test
+  public void knightMovesShouldContainFourPositionsNearChessboardCorner() {
+    assertStreamSetEquals(
+      Set.of(
+        new Move(B7, D8), new Move(B7, D6), new Move(B7, C5), new Move(B7, A5)
+      ),
+      KNIGHT.getMovesFromPosition(B7)
+    );
+  }
 }

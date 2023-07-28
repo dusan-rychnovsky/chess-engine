@@ -1,12 +1,14 @@
 package cz.dusanrychnovsky.chessengine.core;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Column.*;
 import static cz.dusanrychnovsky.chessengine.core.Direction.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
+import static java.util.Arrays.asList;
 
 /**
  * Represents a position on a chessboard, which is a combination
@@ -123,5 +125,27 @@ public enum Position {
 
   public Row getRow() {
     return this.row;
+  }
+
+  /**
+   * @return result of applying a sequence of steps in the given directions
+   * to the represented starting position, if exists
+   */
+  public Optional<Position> apply(List<Direction> directions) {
+    var result = Optional.of(this);
+    for  (var direction : directions) {
+      if (result.isPresent()) {
+        result = direction.apply(result.get());
+      }
+    }
+    return result;
+  }
+
+  /**
+   * @return result of applying a sequence of steps in the given directions
+   * to the represented starting position, if exists
+   */
+  public Optional<Position> apply(Direction... directions) {
+    return apply(asList(directions));
   }
 }
