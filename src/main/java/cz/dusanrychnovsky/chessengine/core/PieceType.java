@@ -11,6 +11,10 @@ import static java.util.Arrays.asList;
 
 /**
  * Represents type of chess piece.
+ *
+ * TODO: respect check/mate
+ * TODO: support castling
+ * TODO: respect pieces which can't move through other pieces
  */
 public enum PieceType {
 
@@ -21,7 +25,7 @@ public enum PieceType {
      * in the same row, except the position on which it's already standing.
      */
     @Override
-    public Stream<Move> getMovesFromPosition(Position position) {
+    public Stream<Move> getMovesFromPosition(Situation situation, Position position) {
       var allColumn = getAllColumn(position.getColumn());
       var allRow = getAllRow(position.getRow());
       return Stream.concat(allColumn, allRow)
@@ -36,7 +40,7 @@ public enum PieceType {
      * the given position. A knight can move in L-shaped pattern.
      */
     @Override
-    public Stream<Move> getMovesFromPosition(Position position) {
+    public Stream<Move> getMovesFromPosition(Situation situation, Position position) {
       var directions = new ArrayList<List<Direction>>();
       for (var horizontal : new Direction[] { left(), right() }) {
         for (var vertical : new Direction[] { top(), bottom() }) {
@@ -58,7 +62,7 @@ public enum PieceType {
      * except the position on which it's already standing.
      */
     @Override
-    public Stream<Move> getMovesFromPosition(Position position) {
+    public Stream<Move> getMovesFromPosition(Situation situation, Position position) {
       var rightDiagonal = getAllRightDiagonal(position);
       var leftDiagonal = getAllLeftDiagonal(position);
       return Stream.concat(rightDiagonal, leftDiagonal)
@@ -75,7 +79,7 @@ public enum PieceType {
      * on which it's already standing.
      */
     @Override
-    public Stream<Move> getMovesFromPosition(Position position) {
+    public Stream<Move> getMovesFromPosition(Situation situation, Position position) {
       var allColumn = getAllColumn(position.getColumn());
       var allRow = getAllRow(position.getRow());
       var rightDiagonal = getAllRightDiagonal(position);
@@ -92,7 +96,7 @@ public enum PieceType {
      * the given position. A king can move to all adjacent fields.
      */
     @Override
-    public Stream<Move> getMovesFromPosition(Position position) {
+    public Stream<Move> getMovesFromPosition(Situation situation, Position position) {
       return Position.getAllAdjacent(position)
         .map(pos -> new Move(position, pos));
     }
@@ -100,7 +104,7 @@ public enum PieceType {
 
   PAWN {
     @Override
-    public Stream<Move> getMovesFromPosition(Position position) {
+    public Stream<Move> getMovesFromPosition(Situation situation, Position position) {
       throw new UnsupportedOperationException("Not yet implemented");
     }
   };
@@ -109,5 +113,5 @@ public enum PieceType {
    * @return All moves a piece of the represented type can make on an empty
    * chessboard from the given position.
    */
-  public abstract Stream<Move> getMovesFromPosition(Position position);
+  public abstract Stream<Move> getMovesFromPosition(Situation situation, Position position);
 }
