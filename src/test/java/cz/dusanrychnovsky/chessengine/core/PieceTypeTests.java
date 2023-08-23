@@ -200,7 +200,8 @@ public class PieceTypeTests {
           WHITE,
           Map.of(
             E4, new Piece(WHITE, PAWN),
-            D5, new Piece(BLACK, KNIGHT)
+            D5, new Piece(BLACK, KNIGHT),
+            F5, new Piece(WHITE, PAWN)
           )
         ),
         E4

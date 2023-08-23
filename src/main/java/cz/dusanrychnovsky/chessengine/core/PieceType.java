@@ -134,28 +134,25 @@ public enum PieceType {
         result.add(position.apply(moveDirection, moveDirection));
       }
 
-      captureDirections.forEach(direction -> {
-        position.apply(direction).ifPresent(
-          targetPosition -> {
-            situation.getPieceAt(targetPosition).ifPresent(
-              targetPiece -> {
-                if (targetPiece.color() == color.getOpposite()) {
-                  result.add(position.apply(direction));
-                }
-              });
+      for (var direction : captureDirections) {
+        var targetPosition = position.apply(direction);
+        if (targetPosition.isPresent()) {
+          var targetPiece = situation.getPieceAt(targetPosition.get());
+          if (targetPiece.isPresent() && targetPiece.get().color() == color.getOpposite()) {
+            result.add(targetPosition);
           }
-        );
-      });
+        }
+      }
 
       return result.stream()
         .filter(Optional::isPresent)
         .map(pos -> new Move(position, pos.get()));
     }
 
-    private Stream<Direction> getCaptureDirections(Color color) {
+    private Set<Direction> getCaptureDirections(Color color) {
       return switch (color) {
-        case WHITE -> Stream.of(topLeft(), topRight());
-        case BLACK -> Stream.of(bottomLeft(), bottomRight());
+        case WHITE -> Set.of(topLeft(), topRight());
+        case BLACK -> Set.of(bottomLeft(), bottomRight());
         default -> throw new IllegalArgumentException("Unknown color: " + color);
       };
     }
