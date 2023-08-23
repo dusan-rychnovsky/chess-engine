@@ -3,9 +3,10 @@ package cz.dusanrychnovsky.chessengine.core;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-import static cz.dusanrychnovsky.chessengine.core.Color.WHITE;
+import static cz.dusanrychnovsky.chessengine.core.Color.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.util.AssertExtensions.assertStreamSetEquals;
@@ -123,6 +124,87 @@ public class PieceTypeTests {
         new Move(B7, D8), new Move(B7, D6), new Move(B7, C5), new Move(B7, A5)
       ),
       KNIGHT.getMovesFromPosition(situation, B7)
+    );
+  }
+
+  @Test
+  public void whitePawnShouldMoveUp() {
+    assertStreamSetEquals(
+      Set.of(new Move(E4, E5)),
+      PAWN.getMovesFromPosition(
+        new Situation(
+          WHITE,
+          Map.of(
+            E4, new Piece(WHITE, PAWN)
+          )
+        ),
+        E4
+      )
+    );
+  }
+
+  @Test
+  public void blackPawnShouldMoveDown() {
+    assertStreamSetEquals(
+      Set.of(new Move(D5, D4)),
+      PAWN.getMovesFromPosition(
+        new Situation(
+          BLACK,
+          Map.of(
+            D5, new Piece(BLACK, PAWN)
+          )
+        ),
+        D5
+      )
+    );
+  }
+
+  @Test
+  public void whitePawnCanMoveTwoSquaresUpWhenFromInitialPosition() {
+    assertStreamSetEquals(
+      Set.of(new Move(E2, E3), new Move(E2, E4)),
+      PAWN.getMovesFromPosition(
+        new Situation(
+          WHITE,
+          Map.of(
+            E2, new Piece(WHITE, PAWN)
+          )
+        ),
+        E2
+      )
+    );
+  }
+
+  @Test
+  public void blackPawnCanMoveTwoSquaresDownWhenFromInitialPosition() {
+    assertStreamSetEquals(
+      Set.of(new Move(D7, D6), new Move(D7, D5)),
+      PAWN.getMovesFromPosition(
+        new Situation(
+          BLACK,
+          Map.of(
+            D7, new Piece(BLACK, PAWN)
+          )
+        ),
+        D7
+      )
+    );
+  }
+
+  @Test
+  public void pawnCanCapturePiecesWhichAreDirectlyAndDiagonallyInFrontOfThem() {
+    assertStreamSetEquals(
+      Set.of(new Move(E4, E5), new Move(E4, D5)),
+      PAWN.getMovesFromPosition(
+        new Situation(
+          WHITE,
+          Map.of(
+            E4, new Piece(WHITE, PAWN),
+            D5, new Piece(BLACK, KNIGHT)
+          )
+        ),
+        E4
+      )
     );
   }
 }

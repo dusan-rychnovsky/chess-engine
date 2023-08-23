@@ -5,4 +5,16 @@ package cz.dusanrychnovsky.chessengine.core;
  */
 public enum Color {
   WHITE, BLACK;
+
+  /**
+   * @return the opposite color.
+   */
+  public Color getOpposite() {
+    if (this == WHITE) {
+      return BLACK;
+    }
+    else {
+      return WHITE;
+    }
+  }
 }

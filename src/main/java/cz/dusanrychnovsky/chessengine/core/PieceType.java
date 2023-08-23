@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Direction.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
+import static cz.dusanrychnovsky.chessengine.core.Row.R2;
+import static cz.dusanrychnovsky.chessengine.core.Row.R7;
 import static java.util.Arrays.asList;
 
 /**
@@ -15,6 +17,8 @@ import static java.util.Arrays.asList;
  * TODO: respect check/mate
  * TODO: support castling
  * TODO: respect pieces which can't move through other pieces
+ * TODO: support pawn promotions
+ * TODO: support en-passant pawn capture
  */
 public enum PieceType {
 
@@ -103,9 +107,73 @@ public enum PieceType {
   },
 
   PAWN {
+    /**
+     * @return All moves a pawn can make from the given position, without
+     * taking into account potential check implications. A pawn can move
+     * vertically (white pawn up, black pawn down), exactly one position,
+     * or two when starting from the pawn's initial position. A pawn can
+     * additionally capture opponent's pieces which are located exactly
+     * one position diagonally (white pawn top-right/-left, black pawn
+     * bottom-right/-left).
+     *
+     * TODO: support en passant
+     */
     @Override
     public Stream<Move> getMovesFromPosition(Situation situation, Position position) {
-      throw new UnsupportedOperationException("Not yet implemented");
+
+      var piece = situation.getPieceAt(position).orElseThrow();
+      var color = piece.color();
+
+      var moveDirection = getMoveDirection(color);
+      var captureDirections = getCaptureDirections(color);
+
+      var result = new HashSet<Optional<Position>>();
+      result.add(position.apply(moveDirection));
+
+      if (isInitialPosition(color, position)) {
+        result.add(position.apply(moveDirection, moveDirection));
+      }
+
+      captureDirections.forEach(direction -> {
+        position.apply(direction).ifPresent(
+          targetPosition -> {
+            situation.getPieceAt(targetPosition).ifPresent(
+              targetPiece -> {
+                if (targetPiece.color() == color.getOpposite()) {
+                  result.add(position.apply(direction));
+                }
+              });
+          }
+        );
+      });
+
+      return result.stream()
+        .filter(Optional::isPresent)
+        .map(pos -> new Move(position, pos.get()));
+    }
+
+    private Stream<Direction> getCaptureDirections(Color color) {
+      return switch (color) {
+        case WHITE -> Stream.of(topLeft(), topRight());
+        case BLACK -> Stream.of(bottomLeft(), bottomRight());
+        default -> throw new IllegalArgumentException("Unknown color: " + color);
+      };
+    }
+
+    private Direction getMoveDirection(Color color) {
+      return switch (color) {
+        case WHITE -> top();
+        case BLACK -> bottom();
+        default -> throw new IllegalArgumentException("Unknown color: " + color);
+      };
+    }
+
+    private boolean isInitialPosition(Color color, Position position) {
+      return position.getRow() == switch (color) {
+        case WHITE -> R2;
+        case BLACK -> R7;
+        default -> throw new IllegalArgumentException("Unknown color: " + color);
+      };
     }
   };
 
