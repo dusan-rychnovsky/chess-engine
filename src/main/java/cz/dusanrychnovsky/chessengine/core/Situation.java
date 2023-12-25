@@ -1,6 +1,6 @@
 package cz.dusanrychnovsky.chessengine.core;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ public class Situation {
   }
 
   public static Situation getInitial() {
-    var pieces = new HashMap<Position, Piece>();
+    var pieces = new EnumMap<Position, Piece>(Position.class);
 
     // white
     pieces.put(A1, new Piece(WHITE, ROOK));
