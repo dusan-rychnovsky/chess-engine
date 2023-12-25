@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
-import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
 import static cz.dusanrychnovsky.chessengine.util.MapExtensions.get;
 
