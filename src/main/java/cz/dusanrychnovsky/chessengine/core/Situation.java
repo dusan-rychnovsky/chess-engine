@@ -1,14 +1,14 @@
 package cz.dusanrychnovsky.chessengine.core;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
-import static cz.dusanrychnovsky.chessengine.core.Row.R2;
-import static cz.dusanrychnovsky.chessengine.core.Row.R7;
+import static cz.dusanrychnovsky.chessengine.core.Row.*;
 import static cz.dusanrychnovsky.chessengine.util.MapExtensions.get;
 
 public class Situation {
@@ -21,32 +21,21 @@ public class Situation {
     this.currentPlayer = currentPlayer;
   }
 
+  /**
+   * @return initial chess situation
+   */
   public static Situation getInitial() {
+    var pattern = List.of(ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK);
+
     var pieces = new EnumMap<Position, Piece>(Position.class);
+    for (int i = 0; i < pattern.size(); i++) {
+      var col = Column.values()[i];
+      var pieceType = pattern.get(i);
 
-    // white
-    pieces.put(A1, new Piece(WHITE, ROOK));
-    pieces.put(B1, new Piece(WHITE, KNIGHT));
-    pieces.put(C1, new Piece(WHITE, BISHOP));
-    pieces.put(D1, new Piece(WHITE, QUEEN));
-    pieces.put(E1, new Piece(WHITE, KING));
-    pieces.put(F1, new Piece(WHITE, BISHOP));
-    pieces.put(G1, new Piece(WHITE, KNIGHT));
-    pieces.put(H1, new Piece(WHITE, ROOK));
-
-    // black
-    pieces.put(A8, new Piece(BLACK, ROOK));
-    pieces.put(B8, new Piece(BLACK, KNIGHT));
-    pieces.put(C8, new Piece(BLACK, BISHOP));
-    pieces.put(D8, new Piece(BLACK, QUEEN));
-    pieces.put(E8, new Piece(BLACK, KING));
-    pieces.put(F8, new Piece(BLACK, BISHOP));
-    pieces.put(G8, new Piece(BLACK, KNIGHT));
-    pieces.put(H8, new Piece(BLACK, ROOK));
-
-    // pawns
-    for (var col : Column.values()) {
+      pieces.put(Position.get(col, R1), new Piece(WHITE, pieceType));
       pieces.put(Position.get(col, R2), new Piece(WHITE, PAWN));
+
+      pieces.put(Position.get(col, R8), new Piece(BLACK, pieceType));
       pieces.put(Position.get(col, R7), new Piece(BLACK, PAWN));
     }
 
