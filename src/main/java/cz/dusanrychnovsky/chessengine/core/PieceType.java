@@ -25,27 +25,27 @@ public enum PieceType {
 
     ROOK {
         /**
-         * @return All moves a rook can make on an empty chessboard from the given
-         * position. A rook can move to all positions in the same column and
-         * in the same row, except the position on which it's already standing.
+         * @return All positions a rook can move to on an empty chessboard from
+         * the given position. A rook can move to all positions in the same
+         * column and in the same row, except the position on which it's
+         * already standing.
          */
         @Override
-        public Stream<Move> getMovesTemplate(Situation situation, Position position) {
+        public Stream<Position> getPositionsTemplate(Situation situation, Position position) {
             var allColumn = getAllColumn(position.getColumn());
             var allRow = getAllRow(position.getRow());
             return Stream.concat(allColumn, allRow)
-                    .filter(pos -> pos != position)
-                    .map(pos -> new Move(position, pos));
+                    .filter(pos -> pos != position);
         }
     },
 
     KNIGHT {
         /**
-         * @return All moves a knight can make on an empty chessboard from
-         * the given position. A knight can move in L-shaped pattern.
+         * @return All positions a knight can move to on an empty chessboard
+         * from the given position. A knight can move in L-shaped pattern.
          */
         @Override
-        public Stream<Move> getMovesTemplate(Situation situation, Position position) {
+        public Stream<Position> getPositionsTemplate(Situation situation, Position position) {
             var directions = new ArrayList<List<Direction>>();
             for (var horizontal : new Direction[] { left(), right() }) {
                 for (var vertical : new Direction[] { top(), bottom() }) {
@@ -56,71 +56,68 @@ public enum PieceType {
             return directions.stream()
                     .map(position::apply)
                     .filter(Optional::isPresent)
-                    .map(pos -> new Move(position, pos.get()));
+                    .map(Optional::get);
         }
     },
 
     BISHOP {
         /**
-         * @return All moves a bishop can make on an empty chessboard from
-         * the given position. A bishop can move to all positions diagonally,
-         * except the position on which it's already standing.
+         * @return All positions a bishop can move to on an empty chessboard
+         * from the given position. A bishop can move to all positions
+         * diagonally, except the position on which it's already standing.
          */
         @Override
-        public Stream<Move> getMovesTemplate(Situation situation, Position position) {
+        public Stream<Position> getPositionsTemplate(Situation situation, Position position) {
             var rightDiagonal = getAllRightDiagonal(position);
             var leftDiagonal = getAllLeftDiagonal(position);
             return Stream.concat(rightDiagonal, leftDiagonal)
-                    .filter(pos -> pos != position)
-                    .map(pos -> new Move(position, pos));
+                    .filter(pos -> pos != position);
         }
     },
 
     QUEEN {
         /**
-         * @return All moves a queen can make on an empty chessboard from
-         * the given position. A queen can move to all positions in the same
-         * column and the same row, as well as diagonally, except the position
-         * on which it's already standing.
+         * @return All positions a queen can move to on an empty chessboard
+         * from the given position. A queen can move to all positions in the
+         * same column and the same row, as well as diagonally, except the
+         * position on which it's already standing.
          */
         @Override
-        public Stream<Move> getMovesTemplate(Situation situation, Position position) {
+        public Stream<Position> getPositionsTemplate(Situation situation, Position position) {
             var allColumn = getAllColumn(position.getColumn());
             var allRow = getAllRow(position.getRow());
             var rightDiagonal = getAllRightDiagonal(position);
             var leftDiagonal = getAllLeftDiagonal(position);
             return StreamExtensions.concat(allColumn, allRow, rightDiagonal, leftDiagonal)
-                    .filter(pos -> pos != position)
-                    .map(pos -> new Move(position, pos));
+                    .filter(pos -> pos != position);
         }
     },
 
     KING {
         /**
-         * @return All moves a king can make on an empty chessboard from
+         * @return All positions a king can move to on an empty chessboard from
          * the given position. A king can move to all adjacent fields.
          */
         @Override
-        public Stream<Move> getMovesTemplate(Situation situation, Position position) {
-            return Position.getAllAdjacent(position)
-                    .map(pos -> new Move(position, pos));
+        public Stream<Position> getPositionsTemplate(Situation situation, Position position) {
+            return Position.getAllAdjacent(position);
         }
     },
 
     PAWN {
         /**
-         * @return All moves a pawn can make from the given position, without
-         * taking into account potential check implications. A pawn can move
-         * vertically (white pawn up, black pawn down), exactly one position,
-         * or two when starting from the pawn's initial position. A pawn can
-         * additionally capture opponent's pieces which are located exactly
-         * one position diagonally (white pawn top-right/-left, black pawn
-         * bottom-right/-left).
+         * @return All positions a pawn can move to from the given position,
+         * without taking into account potential check implications. A pawn can
+         * move vertically (white pawn up, black pawn down), exactly one
+         * position, or two when starting from the pawn's initial position.
+         * A pawn can additionally capture opponent's pieces which are located
+         * exactly one position diagonally (white pawn top-right/-left, black
+         * pawn bottom-right/-left).
          *
          * TODO: support en passant
          */
         @Override
-        public Stream<Move> getMovesTemplate(Situation situation, Position position) {
+        public Stream<Position> getPositionsTemplate(Situation situation, Position position) {
 
             var piece = situation.getPieceAt(position).orElseThrow();
             var color = piece.color();
@@ -147,7 +144,7 @@ public enum PieceType {
 
             return result.stream()
                     .filter(Optional::isPresent)
-                    .map(pos -> new Move(position, pos.get()));
+                    .map(Optional::get);
         }
 
         private Set<Direction> getCaptureDirections(Color color) {
@@ -179,5 +176,13 @@ public enum PieceType {
      * @return All moves a piece of the represented type can make on an empty
      * chessboard from the given position.
      */
-    public abstract Stream<Move> getMovesTemplate(Situation situation, Position position);
+    public Stream<Move> getMovesTemplate(Situation situation, Position position) {
+        return getPositionsTemplate(situation, position).map(pos -> new Move(position, pos));
+    }
+
+    /**
+     * @return All positions a piece of the represented type can can move to on an empty
+     * chessboard from the given position.
+     */
+    protected abstract Stream<Position> getPositionsTemplate(Situation situation, Position position);
 }
