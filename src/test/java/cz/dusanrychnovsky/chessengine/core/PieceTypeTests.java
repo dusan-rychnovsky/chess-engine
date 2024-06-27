@@ -27,7 +27,7 @@ public class PieceTypeTests {
         new Move(D3, A3), new Move(D3, B3), new Move(D3, C3),
         new Move(D3, E3), new Move(D3, F3), new Move(D3, G3), new Move(D3, H3)
       ),
-      ROOK.getMovesFromPosition(situation, D3));
+      ROOK.getMovesTemplate(situation, D3));
   }
 
   @Test
@@ -41,7 +41,7 @@ public class PieceTypeTests {
         new Move(D3, F1), new Move(D3, E2), new Move(D3, C4), new Move(D3, B5),
         new Move(D3, A6)
       ),
-      BISHOP.getMovesFromPosition(situation, D3));
+      BISHOP.getMovesTemplate(situation, D3));
   }
 
   @Test
@@ -61,7 +61,7 @@ public class PieceTypeTests {
         new Move(D3, F1), new Move(D3, E2), new Move(D3, C4), new Move(D3, B5),
         new Move(D3, A6)
       ),
-      QUEEN.getMovesFromPosition(situation, D3)
+      QUEEN.getMovesTemplate(situation, D3)
     );
   }
 
@@ -73,7 +73,7 @@ public class PieceTypeTests {
         new Move(D3, C3), new Move(D3, E3),
         new Move(D3, C2), new Move(D3, D2), new Move(D3, E2)
       ),
-      KING.getMovesFromPosition(situation, D3)
+      KING.getMovesTemplate(situation, D3)
     );
   }
 
@@ -84,7 +84,7 @@ public class PieceTypeTests {
         new Move(C5, D7), new Move(C5, E6), new Move(C5, E4), new Move(C5, D3),
         new Move(C5, B3), new Move(C5, A4), new Move(C5, A6), new Move(C5, B7)
       ),
-      KNIGHT.getMovesFromPosition(situation, C5)
+      KNIGHT.getMovesTemplate(situation, C5)
     );
   }
 
@@ -92,7 +92,7 @@ public class PieceTypeTests {
   public void knightMovesShouldContainTwoPositionsFromChessboardCorner() {
     assertStreamSetEquals(
       Set.of(new Move(A1, B3), new Move(A1, C2)),
-      KNIGHT.getMovesFromPosition(situation, A1)
+      KNIGHT.getMovesTemplate(situation, A1)
     );
   }
 
@@ -102,7 +102,7 @@ public class PieceTypeTests {
       Set.of(
         new Move(H5, G7), new Move(H5, F6), new Move(H5, F4), new Move(H5, G3)
       ),
-      KNIGHT.getMovesFromPosition(situation, H5)
+      KNIGHT.getMovesTemplate(situation, H5)
     );
   }
 
@@ -113,7 +113,7 @@ public class PieceTypeTests {
         new Move(E7, G8), new Move(E7, G6), new Move(E7, F5),
         new Move(E7, D5), new Move(E7, C6), new Move(E7, C8)
       ),
-      KNIGHT.getMovesFromPosition(situation, E7)
+      KNIGHT.getMovesTemplate(situation, E7)
     );
   }
 
@@ -123,7 +123,7 @@ public class PieceTypeTests {
       Set.of(
         new Move(B7, D8), new Move(B7, D6), new Move(B7, C5), new Move(B7, A5)
       ),
-      KNIGHT.getMovesFromPosition(situation, B7)
+      KNIGHT.getMovesTemplate(situation, B7)
     );
   }
 
@@ -131,7 +131,7 @@ public class PieceTypeTests {
   public void whitePawnShouldMoveUp() {
     assertStreamSetEquals(
       Set.of(new Move(E4, E5)),
-      PAWN.getMovesFromPosition(
+      PAWN.getMovesTemplate(
         new Situation(
           WHITE,
           Map.of(
@@ -147,7 +147,7 @@ public class PieceTypeTests {
   public void blackPawnShouldMoveDown() {
     assertStreamSetEquals(
       Set.of(new Move(D5, D4)),
-      PAWN.getMovesFromPosition(
+      PAWN.getMovesTemplate(
         new Situation(
           BLACK,
           Map.of(
@@ -163,7 +163,7 @@ public class PieceTypeTests {
   public void whitePawnCanMoveTwoSquaresUpWhenFromInitialPosition() {
     assertStreamSetEquals(
       Set.of(new Move(E2, E3), new Move(E2, E4)),
-      PAWN.getMovesFromPosition(
+      PAWN.getMovesTemplate(
         new Situation(
           WHITE,
           Map.of(
@@ -179,7 +179,7 @@ public class PieceTypeTests {
   public void blackPawnCanMoveTwoSquaresDownWhenFromInitialPosition() {
     assertStreamSetEquals(
       Set.of(new Move(D7, D6), new Move(D7, D5)),
-      PAWN.getMovesFromPosition(
+      PAWN.getMovesTemplate(
         new Situation(
           BLACK,
           Map.of(
@@ -195,7 +195,7 @@ public class PieceTypeTests {
   public void pawnCanCapturePiecesWhichAreDirectlyAndDiagonallyInFrontOfThem() {
     assertStreamSetEquals(
       Set.of(new Move(E4, E5), new Move(E4, D5)),
-      PAWN.getMovesFromPosition(
+      PAWN.getMovesTemplate(
         new Situation(
           WHITE,
           Map.of(
