@@ -1,14 +1,14 @@
 package cz.dusanrychnovsky.chessengine.core;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
 import static cz.dusanrychnovsky.chessengine.util.MapExtensions.get;
+import static java.util.stream.Collectors.toSet;
 
 public class Situation {
 
@@ -39,6 +39,24 @@ public class Situation {
     }
 
     return new Situation(WHITE, pieces);
+  }
+
+  /**
+   * @return all moves which are valid in the represented situation,
+   * by the current player
+   */
+  public Stream<Move> getValidMoves() {
+    var result = new HashSet<Move>();
+    for (var entry : pieces.entrySet()) {
+      var position = entry.getKey();
+      var piece = entry.getValue();
+      if (piece.color() == currentPlayer) {
+        result.addAll(
+          piece.type().getMovesTemplate(this, position)
+            .collect(toSet()));
+      }
+    }
+    return result.stream();
   }
 
   /**
