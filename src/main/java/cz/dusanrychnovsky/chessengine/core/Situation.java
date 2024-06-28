@@ -1,7 +1,6 @@
 package cz.dusanrychnovsky.chessengine.core;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
