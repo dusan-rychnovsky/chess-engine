@@ -1,5 +1,6 @@
 package cz.dusanrychnovsky.chessengine.core;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -13,8 +14,7 @@ import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
 import static cz.dusanrychnovsky.chessengine.core.Column.*;
 import static cz.dusanrychnovsky.chessengine.util.AssertExtensions.assertStreamSetEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SituationTests {
 
@@ -96,6 +96,44 @@ public class SituationTests {
         Map.of(
           B7, new Piece(WHITE, BISHOP),
           G2, new Piece(WHITE, ROOK)
+        )
+      ).getValidMoves()
+    );
+  }
+
+  @Test
+  @Ignore
+  public void getValidMoves_regularPiecesCannotMoveThroughOtherPiecesOfSameColor() {
+    assertStreamSetEquals(
+      Set.of(
+        // bishop
+        new Move(B7, A8), new Move(B7, C8), new Move(B7, A6), new Move(B7, C6),
+        // pawn
+        new Move(D5, D6)
+      ),
+      new Situation(
+        WHITE,
+        Map.of(
+          B7, new Piece(WHITE, BISHOP),
+          D5, new Piece(WHITE, PAWN)
+        )
+      ).getValidMoves()
+    );
+  }
+
+  @Test
+  @Ignore
+  public void getValidMoves_regularPiecesCannotMoveThroughOtherPiecesOfOtherColor() {
+    assertStreamSetEquals(
+      Set.of(
+        // bishop
+        new Move(B7, A8), new Move(B7, C8), new Move(B7, A6), new Move(B7, C6)
+      ),
+      new Situation(
+        WHITE,
+        Map.of(
+          B7, new Piece(WHITE, BISHOP),
+          D5, new Piece(BLACK, PAWN)
         )
       ).getValidMoves()
     );
