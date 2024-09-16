@@ -23,11 +23,28 @@ public enum PieceTypeV2 {
             }
             return result;
         }
+    },
+
+    BISHOP {
+        @Override
+        public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
+            var result = new HashSet<MoveV2>();
+            var directions = Set.of(topLeft(), topRight(), bottomLeft(), bottomRight());
+            for (var direction : directions) {
+                var intermediaries = new HashSet<Position>();
+                Optional<Position> to = Optional.of(from);
+                while ((to = direction.apply(to.get())).isPresent()) {
+                    result.add(new MoveV2(from, to.get(), new HashSet<>(intermediaries)));
+                    intermediaries.add(to.get());
+                }
+            }
+            return result;
+        }
     };
 
     /**
      * @return All moves a piece of the represented type can make on an empty
      * chessboard from the given position.
      */
-    public abstract Set<MoveV2> getMovesTemplate(Situation situation, Position position);
+    public abstract Set<MoveV2> getMovesTemplate(Situation situation, Position from);
 }
