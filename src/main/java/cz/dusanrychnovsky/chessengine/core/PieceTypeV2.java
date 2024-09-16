@@ -4,35 +4,22 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static cz.dusanrychnovsky.chessengine.core.Direction.*;
+
 public enum PieceTypeV2 {
 
     ROOK {
         @Override
         public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
             var result = new HashSet<MoveV2>();
-            var intermediaries = new HashSet<Position>();
-            var columnTo = Optional.of(from.getColumn());
-            while ((columnTo = columnTo.get().getPrevious()).isPresent()) {
-                result.add(new MoveV2(from, Position.get(columnTo.get(), from.getRow()), new HashSet<>(intermediaries)));
-                intermediaries.add(Position.get(columnTo.get(), from.getRow()));
-            }
-            intermediaries = new HashSet<>();
-            columnTo = Optional.of(from.getColumn());
-            while ((columnTo = columnTo.get().getNext()).isPresent()) {
-                result.add(new MoveV2(from, Position.get(columnTo.get(), from.getRow()), new HashSet<>(intermediaries)));
-                intermediaries.add(Position.get(columnTo.get(), from.getRow()));
-            }
-            intermediaries = new HashSet<>();
-            var rowTo = Optional.of(from.getRow());
-            while ((rowTo = rowTo.get().getNext()).isPresent()) {
-                result.add(new MoveV2(from, Position.get(from.getColumn(), rowTo.get()), new HashSet<>(intermediaries)));
-                intermediaries.add(Position.get(from.getColumn(), rowTo.get()));
-            }
-            intermediaries = new HashSet<>();
-            rowTo = Optional.of(from.getRow());
-            while ((rowTo = rowTo.get().getPrevious()).isPresent()) {
-                result.add(new MoveV2(from, Position.get(from.getColumn(), rowTo.get()), new HashSet<>(intermediaries)));
-                intermediaries.add(Position.get(from.getColumn(), rowTo.get()));
+            var directions = Set.of(top(), bottom(), left(), right());
+            for (var direction : directions) {
+                var intermediaries = new HashSet<Position>();
+                Optional<Position> to = Optional.of(from);
+                while ((to = direction.apply(to.get())).isPresent()) {
+                    result.add(new MoveV2(from, to.get(), new HashSet<>(intermediaries)));
+                    intermediaries.add(to.get());
+                }
             }
             return result;
         }
