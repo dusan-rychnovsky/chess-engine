@@ -41,4 +41,16 @@ public class PieceTypeV2Tests {
         assertTrue(moves.contains(new MoveV2(A1, B2, Set.of())));
         assertTrue(moves.contains(new MoveV2(A1, D4, Set.of(B2, C3))));
     }
+
+    @Test
+    public void queen_getMovesTemplate_canMoveHorizontallyVerticallyAndDiagonally() {
+        var moves = QUEEN.getMovesTemplate(situation, D3);
+        assertEquals(25, moves.size());
+        assertTrue(moves.contains(new MoveV2(D3, E3, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, D5, Set.of(D4))));
+        assertTrue(moves.contains(new MoveV2(D3, A3, Set.of(C3, B3))));
+        assertTrue(moves.contains(new MoveV2(D3, E4, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, F1, Set.of(E2))));
+        assertTrue(moves.contains(new MoveV2(D3, A6, Set.of(C4, B5))));
+    }
 }

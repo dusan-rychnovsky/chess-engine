@@ -40,6 +40,16 @@ public enum PieceTypeV2 {
             }
             return result;
         }
+    },
+
+    QUEEN {
+        @Override
+        public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
+            var result = new HashSet<MoveV2>();
+            result.addAll(ROOK.getMovesTemplate(situation, from));
+            result.addAll(BISHOP.getMovesTemplate(situation, from));
+            return result;
+        }
     };
 
     /**
