@@ -10,6 +10,12 @@ import static java.util.stream.Collectors.toSet;
 public enum PieceTypeV2 {
 
     ROOK {
+        /**
+         * @return All moves a rook can make on an empty chessboard from
+         * the given position. A rook can move to all positions in the same
+         * column and in the same row, except the position on which it's
+         * already standing.
+         */
         @Override
         public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
             var result = new HashSet<MoveV2>();
@@ -27,6 +33,11 @@ public enum PieceTypeV2 {
     },
 
     BISHOP {
+        /**
+         * @return All moves a bishop can make on an empty chessboard
+         * from the given position. A bishop can move to all positions
+         * diagonally, except the position on which it's already standing.
+         */
         @Override
         public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
             var result = new HashSet<MoveV2>();
@@ -44,6 +55,12 @@ public enum PieceTypeV2 {
     },
 
     QUEEN {
+        /**
+         * @return All moves a queen can make on an empty chessboard
+         * from the given position. A queen can move to all positions in the
+         * same column and the same row, as well as diagonally, except the
+         * position on which it's already standing.
+         */
         @Override
         public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
             var result = new HashSet<MoveV2>();
@@ -54,6 +71,10 @@ public enum PieceTypeV2 {
     },
 
     KING {
+        /**
+         * @return All moves a king can make on an empty chessboard from
+         * the given position. A king can move to all adjacent fields.
+         */
         @Override
         public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
             return Position.getAllAdjacent(from)
