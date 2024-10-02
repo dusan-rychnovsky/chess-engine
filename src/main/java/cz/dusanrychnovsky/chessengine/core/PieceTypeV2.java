@@ -1,10 +1,10 @@
 package cz.dusanrychnovsky.chessengine.core;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static cz.dusanrychnovsky.chessengine.core.Direction.*;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 
 public enum PieceTypeV2 {
@@ -80,6 +80,31 @@ public enum PieceTypeV2 {
             return Position.getAllAdjacent(from)
                 .map(to -> new MoveV2(from, to, Set.of()))
                 .collect(toSet());
+        }
+    },
+
+    KNIGHT {
+        /**
+         * @return All moves a knight can make on an empty chessboard
+         * from the given position. A knight can move in L-shaped pattern.
+         *
+         * Knight moves always have no intermediaries - knights can jump
+         * over other pieces on the board.
+         */
+        @Override
+        public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
+            var directions = new ArrayList<List<Direction>>();
+            for (var horizontal : new Direction[] { left(), right() }) {
+                for (var vertical : new Direction[] { top(), bottom() }) {
+                    directions.add(asList(horizontal, horizontal, vertical));
+                    directions.add(asList(vertical, vertical, horizontal));
+                }
+            }
+            return directions.stream()
+                .map(from::apply)
+                .filter(Optional::isPresent)
+                .map(to -> new MoveV2(from, to.get(), Set.of()))
+                .collect(Collectors.toSet());
         }
     };
 
