@@ -53,4 +53,27 @@ public class PieceTypeV2Tests {
         assertTrue(moves.contains(new MoveV2(D3, F1, Set.of(E2))));
         assertTrue(moves.contains(new MoveV2(D3, A6, Set.of(C4, B5))));
     }
+
+    @Test
+    public void king_getMovesTemplate_canMoveToAdjacentFields() {
+        var moves = KING.getMovesTemplate(situation, D3);
+        assertEquals(8, moves.size());
+        assertTrue(moves.contains(new MoveV2(D3, C4, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, D4, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, E4, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, C3, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, E3, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, C2, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, D2, Set.of())));
+        assertTrue(moves.contains(new MoveV2(D3, E2, Set.of())));
+    }
+
+    @Test
+    public void king_getMovesTemplate_fromCorner_canOnlyMoveToThreeFields() {
+        var moves = KING.getMovesTemplate(situation, A1);
+        assertEquals(3, moves.size());
+        assertTrue(moves.contains(new MoveV2(A1, A2, Set.of())));
+        assertTrue(moves.contains(new MoveV2(A1, B2, Set.of())));
+        assertTrue(moves.contains(new MoveV2(A1, B1, Set.of())));
+    }
 }

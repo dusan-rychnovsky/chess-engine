@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static cz.dusanrychnovsky.chessengine.core.Direction.*;
+import static java.util.stream.Collectors.toSet;
 
 public enum PieceTypeV2 {
 
@@ -49,6 +50,15 @@ public enum PieceTypeV2 {
             result.addAll(ROOK.getMovesTemplate(situation, from));
             result.addAll(BISHOP.getMovesTemplate(situation, from));
             return result;
+        }
+    },
+
+    KING {
+        @Override
+        public Set<MoveV2> getMovesTemplate(Situation situation, Position from) {
+            return Position.getAllAdjacent(from)
+                .map(to -> new MoveV2(from, to, Set.of()))
+                .collect(toSet());
         }
     };
 
