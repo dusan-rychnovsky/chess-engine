@@ -18,7 +18,7 @@ public enum PieceTypeV2 {
          * already standing.
          */
         @Override
-        public Set<MoveV2> getMovesTemplate(SituationV2 situation, Position from) {
+        public Set<MoveV2> getMovePatterns(SituationV2 situation, Position from) {
             var result = new HashSet<MoveV2>();
             var directions = Set.of(top(), bottom(), left(), right());
             for (var direction : directions) {
@@ -40,7 +40,7 @@ public enum PieceTypeV2 {
          * diagonally, except the position on which it's already standing.
          */
         @Override
-        public Set<MoveV2> getMovesTemplate(SituationV2 situation, Position from) {
+        public Set<MoveV2> getMovePatterns(SituationV2 situation, Position from) {
             var result = new HashSet<MoveV2>();
             var directions = Set.of(topLeft(), topRight(), bottomLeft(), bottomRight());
             for (var direction : directions) {
@@ -63,10 +63,10 @@ public enum PieceTypeV2 {
          * position on which it's already standing.
          */
         @Override
-        public Set<MoveV2> getMovesTemplate(SituationV2 situation, Position from) {
+        public Set<MoveV2> getMovePatterns(SituationV2 situation, Position from) {
             var result = new HashSet<MoveV2>();
-            result.addAll(ROOK.getMovesTemplate(situation, from));
-            result.addAll(BISHOP.getMovesTemplate(situation, from));
+            result.addAll(ROOK.getMovePatterns(situation, from));
+            result.addAll(BISHOP.getMovePatterns(situation, from));
             return result;
         }
     },
@@ -77,7 +77,7 @@ public enum PieceTypeV2 {
          * the given position. A king can move to all adjacent fields.
          */
         @Override
-        public Set<MoveV2> getMovesTemplate(SituationV2 situation, Position from) {
+        public Set<MoveV2> getMovePatterns(SituationV2 situation, Position from) {
             return Position.getAllAdjacent(from)
                 .map(to -> new MoveV2(from, to, Set.of()))
                 .collect(toSet());
@@ -93,7 +93,7 @@ public enum PieceTypeV2 {
          * over other pieces on the board.
          */
         @Override
-        public Set<MoveV2> getMovesTemplate(SituationV2 situation, Position from) {
+        public Set<MoveV2> getMovePatterns(SituationV2 situation, Position from) {
             var directions = new ArrayList<List<Direction>>();
             for (var horizontal : new Direction[] { left(), right() }) {
                 for (var vertical : new Direction[] { top(), bottom() }) {
@@ -125,7 +125,7 @@ public enum PieceTypeV2 {
          * TODO: support en passant
          */
         @Override
-        public Set<MoveV2> getMovesTemplate(SituationV2 situation, Position from) {
+        public Set<MoveV2> getMovePatterns(SituationV2 situation, Position from) {
             var tos = new HashSet<Optional<Position>>();
 
             var piece = situation.getPieceAt(from).orElseThrow();
@@ -184,5 +184,5 @@ public enum PieceTypeV2 {
      * @return All moves a piece of the represented type can make on an empty
      * chessboard from the given position.
      */
-    public abstract Set<MoveV2> getMovesTemplate(SituationV2 situation, Position from);
+    public abstract Set<MoveV2> getMovePatterns(SituationV2 situation, Position from);
 }

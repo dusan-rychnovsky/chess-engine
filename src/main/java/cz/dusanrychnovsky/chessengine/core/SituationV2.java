@@ -8,7 +8,6 @@ import static cz.dusanrychnovsky.chessengine.core.Color.WHITE;
 import static cz.dusanrychnovsky.chessengine.core.PieceTypeV2.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
 import static cz.dusanrychnovsky.chessengine.util.MapExtensions.get;
-import static java.util.stream.Collectors.toSet;
 
 public class SituationV2 {
 
@@ -52,7 +51,7 @@ public class SituationV2 {
       var piece = entry.getValue();
       if (piece.color() == currentPlayer) {
         result.addAll(
-            piece.type().getMovesTemplate(this, position)
+            piece.type().getMovePatterns(this, position)
         );
       }
     }
