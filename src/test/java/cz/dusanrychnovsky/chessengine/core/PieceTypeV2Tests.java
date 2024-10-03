@@ -3,6 +3,7 @@ package cz.dusanrychnovsky.chessengine.core;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
@@ -14,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class PieceTypeV2Tests {
 
     // TODO: temporary placeholder until more advanced features are implemented (see PieceType)
-    private final Situation situation = new Situation(WHITE, new HashMap<>());
+    private final SituationV2 situation = new SituationV2(WHITE, new HashMap<>());
 
     @Test
     public void rook_getMovesTemplate_canMoveHorizontallyAndVertically() {
@@ -119,6 +120,71 @@ public class PieceTypeV2Tests {
         assertTrue(moves.contains(new MoveV2(F7, E5, Set.of())));
         assertTrue(moves.contains(new MoveV2(F7, D6, Set.of())));
         assertTrue(moves.contains(new MoveV2(F7, D8, Set.of())));
+    }
 
+    @Test
+    public void pawn_getMovesTemplate_white_movesUp() {
+        var moves = PAWN.getMovesTemplate(
+            new SituationV2(
+                WHITE,
+                Map.of(B5, new PieceV2(WHITE, PAWN))
+            ),
+            B5);
+        assertEquals(1, moves.size());
+        assertTrue(moves.contains(new MoveV2(B5, B6, Set.of())));
+    }
+
+    @Test
+    public void pawn_getMovesTemplate_black_movesDown() {
+        var moves = PAWN.getMovesTemplate(
+            new SituationV2(
+                BLACK,
+                Map.of(B5, new PieceV2(BLACK, PAWN))
+            ),
+            B5);
+        assertEquals(1, moves.size());
+        assertTrue(moves.contains(new MoveV2(B5, B4, Set.of())));
+    }
+
+    @Test
+    public void pawn_getMovesTemplate_white_fromInitialPosition_canMoveTwoFieldsUp() {
+        var moves = PAWN.getMovesTemplate(
+            new SituationV2(
+                WHITE,
+                Map.of(B2, new PieceV2(WHITE, PAWN))
+            ),
+            B2);
+        assertEquals(2, moves.size());
+        assertTrue(moves.contains(new MoveV2(B2, B3, Set.of())));
+        assertTrue(moves.contains(new MoveV2(B2, B4, Set.of())));
+    }
+
+    @Test
+    public void pawn_getMovesTemplate_black_fromInitialPosition_canMoveTwoFieldsDown() {
+        var moves = PAWN.getMovesTemplate(
+            new SituationV2(
+                BLACK,
+                Map.of(B7, new PieceV2(BLACK, PAWN))
+            ),
+            B7);
+        assertEquals(2, moves.size());
+        assertTrue(moves.contains(new MoveV2(B7, B6, Set.of())));
+        assertTrue(moves.contains(new MoveV2(B7, B5, Set.of())));
+    }
+
+    @Test
+    public void pawn_getMovesTemplate_canCapturePiecesWhichAreDirectlyAndDiagonallyInFrontOfThem() {
+        var moves = PAWN.getMovesTemplate(
+            new SituationV2(
+                WHITE,
+                Map.of(
+                    B5, new PieceV2(WHITE, PAWN),
+                    C6, new PieceV2(BLACK, PAWN),
+                    C4, new PieceV2(BLACK, PAWN))
+            ),
+            B5);
+        assertEquals(2, moves.size());
+        assertTrue(moves.contains(new MoveV2(B5, B6, Set.of())));
+        assertTrue(moves.contains(new MoveV2(B5, C6, Set.of())));
     }
 }
