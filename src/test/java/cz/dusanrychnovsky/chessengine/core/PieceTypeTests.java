@@ -57,134 +57,168 @@ public class PieceTypeTests {
 
     @Test
     public void king_getMovePatterns_canMoveToAdjacentFields() {
-        var moves = KING.getMovePatterns(situation, D3);
-        assertEquals(8, moves.size());
-        assertTrue(moves.contains(new Move(D3, C4, Set.of())));
-        assertTrue(moves.contains(new Move(D3, D4, Set.of())));
-        assertTrue(moves.contains(new Move(D3, E4, Set.of())));
-        assertTrue(moves.contains(new Move(D3, C3, Set.of())));
-        assertTrue(moves.contains(new Move(D3, E3, Set.of())));
-        assertTrue(moves.contains(new Move(D3, C2, Set.of())));
-        assertTrue(moves.contains(new Move(D3, D2, Set.of())));
-        assertTrue(moves.contains(new Move(D3, E2, Set.of())));
+        assertEquals(
+            Set.of(
+                new Move(D3, C4, Set.of()),
+                new Move(D3, D4, Set.of()),
+                new Move(D3, E4, Set.of()),
+                new Move(D3, C3, Set.of()),
+                new Move(D3, E3, Set.of()),
+                new Move(D3, C2, Set.of()),
+                new Move(D3, D2, Set.of()),
+                new Move(D3, E2, Set.of())
+            ),
+            KING.getMovePatterns(situation, D3)
+        );
     }
 
     @Test
     public void king_getMovePatterns_fromCorner_canOnlyMoveToThreeFields() {
-        var moves = KING.getMovePatterns(situation, A1);
-        assertEquals(3, moves.size());
-        assertTrue(moves.contains(new Move(A1, A2, Set.of())));
-        assertTrue(moves.contains(new Move(A1, B2, Set.of())));
-        assertTrue(moves.contains(new Move(A1, B1, Set.of())));
+        assertEquals(
+            Set.of(
+                new Move(A1, A2, Set.of()),
+                new Move(A1, B2, Set.of()),
+                new Move(A1, B1, Set.of())
+            ),
+            KING.getMovePatterns(situation, A1)
+        );
     }
 
     @Test
     public void knight_getMovePatterns_fromCenter_canMoveToEightFields() {
-        var moves = KNIGHT.getMovePatterns(situation, D3);
-        assertEquals(8, moves.size());
-        assertTrue(moves.contains(new Move(D3, F2, Set.of())));
-        assertTrue(moves.contains(new Move(D3, E1, Set.of())));
-        assertTrue(moves.contains(new Move(D3, C1, Set.of())));
-        assertTrue(moves.contains(new Move(D3, B2, Set.of())));
-        assertTrue(moves.contains(new Move(D3, B4, Set.of())));
-        assertTrue(moves.contains(new Move(D3, C5, Set.of())));
-        assertTrue(moves.contains(new Move(D3, E5, Set.of())));
-        assertTrue(moves.contains(new Move(D3, F4, Set.of())));
+        assertEquals(
+            Set.of(
+                new Move(D3, F2, Set.of()),
+                new Move(D3, E1, Set.of()),
+                new Move(D3, C1, Set.of()),
+                new Move(D3, B2, Set.of()),
+                new Move(D3, B4, Set.of()),
+                new Move(D3, C5, Set.of()),
+                new Move(D3, E5, Set.of()),
+                new Move(D3, F4, Set.of())
+            ),
+            KNIGHT.getMovePatterns(situation, D3)
+        );
     }
 
     @Test
     public void knight_getMovePatterns_fromCorner_canMoveToTwoFields() {
-        var moves = KNIGHT.getMovePatterns(situation, A1);
-        assertEquals(2, moves.size());
-        assertTrue(moves.contains(new Move(A1, C2, Set.of())));
-        assertTrue(moves.contains(new Move(A1, B3, Set.of())));
+        assertEquals(
+            Set.of(
+                new Move(A1, C2, Set.of()),
+                new Move(A1, B3, Set.of())
+            ),
+            KNIGHT.getMovePatterns(situation, A1)
+        );
     }
 
     @Test
     public void knight_getMovePatterns_fromEdge_canMoveToFourFields() {
-        var moves = KNIGHT.getMovePatterns(situation, H5);
-        assertEquals(4, moves.size());
-        assertTrue(moves.contains(new Move(H5, G3, Set.of())));
-        assertTrue(moves.contains(new Move(H5, F4, Set.of())));
-        assertTrue(moves.contains(new Move(H5, F6, Set.of())));
-        assertTrue(moves.contains(new Move(H5, G7, Set.of())));
+        assertEquals(
+            Set.of(
+                new Move(H5, G3, Set.of()),
+                new Move(H5, F4, Set.of()),
+                new Move(H5, F6, Set.of()),
+                new Move(H5, G7, Set.of())
+            ),
+            KNIGHT.getMovePatterns(situation, H5)
+        );
     }
 
     @Test
     public void knight_getMovePatterns_oneFieldAwayFromEdge_canMoveToSixFields() {
-        var moves = KNIGHT.getMovePatterns(situation, F7);
-        assertEquals(6, moves.size());
-        assertTrue(moves.contains(new Move(F7, H8, Set.of())));
-        assertTrue(moves.contains(new Move(F7, H6, Set.of())));
-        assertTrue(moves.contains(new Move(F7, G5, Set.of())));
-        assertTrue(moves.contains(new Move(F7, E5, Set.of())));
-        assertTrue(moves.contains(new Move(F7, D6, Set.of())));
-        assertTrue(moves.contains(new Move(F7, D8, Set.of())));
+        assertEquals(
+            Set.of(
+                new Move(F7, H8, Set.of()),
+                new Move(F7, H6, Set.of()),
+                new Move(F7, G5, Set.of()),
+                new Move(F7, E5, Set.of()),
+                new Move(F7, D6, Set.of()),
+                new Move(F7, D8, Set.of())
+            ),
+            KNIGHT.getMovePatterns(situation, F7)
+        );
     }
 
     @Test
     public void pawn_getMovesTemplate_white_movesUp() {
-        var moves = PAWN.getMovePatterns(
-            new Situation(
-                WHITE,
-                Map.of(B5, new Piece(WHITE, PAWN))
+        assertEquals(
+            Set.of(
+                new Move(B5, B6, Set.of())
             ),
-            B5);
-        assertEquals(1, moves.size());
-        assertTrue(moves.contains(new Move(B5, B6, Set.of())));
+            PAWN.getMovePatterns(
+                new Situation(
+                    WHITE,
+                    Map.of(B5, new Piece(WHITE, PAWN))
+                ),
+                B5)
+        );
     }
 
     @Test
     public void pawn_getMovesTemplate_black_movesDown() {
-        var moves = PAWN.getMovePatterns(
-            new Situation(
-                BLACK,
-                Map.of(B5, new Piece(BLACK, PAWN))
+        assertEquals(
+            Set.of(
+                new Move(B5, B4, Set.of())
             ),
-            B5);
-        assertEquals(1, moves.size());
-        assertTrue(moves.contains(new Move(B5, B4, Set.of())));
+            PAWN.getMovePatterns(
+                new Situation(
+                    BLACK,
+                    Map.of(B5, new Piece(BLACK, PAWN))
+                ),
+                B5)
+        );
     }
 
     @Test
     public void pawn_getMovePatterns_white_fromInitialPosition_canMoveTwoFieldsUp() {
-        var moves = PAWN.getMovePatterns(
-            new Situation(
-                WHITE,
-                Map.of(B2, new Piece(WHITE, PAWN))
+        assertEquals(
+            Set.of(
+                new Move(B2, B3, Set.of()),
+                new Move(B2, B4, Set.of())
+
             ),
-            B2);
-        assertEquals(2, moves.size());
-        assertTrue(moves.contains(new Move(B2, B3, Set.of())));
-        assertTrue(moves.contains(new Move(B2, B4, Set.of())));
+            PAWN.getMovePatterns(
+                new Situation(
+                    WHITE,
+                    Map.of(B2, new Piece(WHITE, PAWN))
+                ),
+                B2)
+        );
     }
 
     @Test
     public void pawn_getMovePatterns_black_fromInitialPosition_canMoveTwoFieldsDown() {
-        var moves = PAWN.getMovePatterns(
-            new Situation(
-                BLACK,
-                Map.of(B7, new Piece(BLACK, PAWN))
+        assertEquals(
+            Set.of(
+                new Move(B7, B6, Set.of()),
+                new Move(B7, B5, Set.of())
             ),
-            B7);
-        assertEquals(2, moves.size());
-        assertTrue(moves.contains(new Move(B7, B6, Set.of())));
-        assertTrue(moves.contains(new Move(B7, B5, Set.of())));
+            PAWN.getMovePatterns(
+                new Situation(
+                    BLACK,
+                    Map.of(B7, new Piece(BLACK, PAWN))
+                ),
+                B7)
+        );
     }
 
     @Test
     public void pawn_getMovePatterns_canCapturePiecesWhichAreDirectlyAndDiagonallyInFrontOfThem() {
-        var moves = PAWN.getMovePatterns(
-            new Situation(
-                WHITE,
-                Map.of(
-                    B5, new Piece(WHITE, PAWN),
-                    C6, new Piece(BLACK, PAWN),
-                    C4, new Piece(BLACK, PAWN))
+        assertEquals(
+            Set.of(
+                new Move(B5, B6, Set.of()),
+                new Move(B5, C6, Set.of())
             ),
-            B5);
-        assertEquals(2, moves.size());
-        assertTrue(moves.contains(new Move(B5, B6, Set.of())));
-        assertTrue(moves.contains(new Move(B5, C6, Set.of())));
+            PAWN.getMovePatterns(
+                new Situation(
+                    WHITE,
+                    Map.of(
+                        B5, new Piece(WHITE, PAWN),
+                        C6, new Piece(BLACK, PAWN),
+                        C4, new Piece(BLACK, PAWN))
+                ),
+                B5)
+        );
     }
 }
