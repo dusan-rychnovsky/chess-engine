@@ -82,14 +82,30 @@ public class SituationTests {
     assertStreamSetEquals(
       Set.of(
         // bishop - two diagonals from B7
-        new Move(B7, A6), new Move(B7, C8),
-        new Move(B7, A8), new Move(B7, C6), new Move(B7, D5), new Move(B7, E4),
-        new Move(B7, F3), new Move(B7, G2), new Move(B7, H1),
+        new Move(B7, A6, Set.of()),
+        new Move(B7, C8, Set.of()),
+        new Move(B7, A8, Set.of()),
+        new Move(B7, C6, Set.of()),
+        new Move(B7, D5, Set.of(C6)),
+        new Move(B7, E4, Set.of(C6, D5)),
+        new Move(B7, F3, Set.of(C6, D5, E4)),
+        new Move(B7, G2, Set.of(C6, D5, E4, F3)),
+        new Move(B7, H1, Set.of(C6, D5, E4, F3, G2)),
         // rook - horizontally and vertically from G2
-        new Move(G2, A2), new Move(G2, B2), new Move(G2, C2), new Move(G2, D2),
-        new Move(G2, E2), new Move(G2, F2), new Move(G2, H2),
-        new Move(G2, G1), new Move(G2, G3), new Move(G2, G4), new Move(G2, G5),
-        new Move(G2, G6), new Move(G2, G7), new Move(G2, G8)
+        new Move(G2, A2, Set.of(F2, E2, D2, C2, B2)),
+        new Move(G2, B2, Set.of(F2, E2, D2, C2)),
+        new Move(G2, C2, Set.of(F2, E2, D2)),
+        new Move(G2, D2, Set.of(F2, E2)),
+        new Move(G2, E2, Set.of(F2)),
+        new Move(G2, F2, Set.of()),
+        new Move(G2, H2, Set.of()),
+        new Move(G2, G1, Set.of()),
+        new Move(G2, G3, Set.of()),
+        new Move(G2, G4, Set.of(G3)),
+        new Move(G2, G5, Set.of(G3, G4)),
+        new Move(G2, G6, Set.of(G3, G4, G5)),
+        new Move(G2, G7, Set.of(G3, G4, G5, G6)),
+        new Move(G2, G8, Set.of(G3, G4, G5, G6, G7))
       ),
       new Situation(
         WHITE,
@@ -107,9 +123,10 @@ public class SituationTests {
     assertStreamSetEquals(
       Set.of(
         // bishop
-        new Move(B7, A8), new Move(B7, C8), new Move(B7, A6), new Move(B7, C6),
+        new Move(B7, A8, Set.of()), new Move(B7, C8, Set.of()),
+        new Move(B7, A6, Set.of()), new Move(B7, C6, Set.of()),
         // pawn
-        new Move(D5, D6)
+        new Move(D5, D6, Set.of())
       ),
       new Situation(
         WHITE,
@@ -127,7 +144,8 @@ public class SituationTests {
     assertStreamSetEquals(
       Set.of(
         // bishop
-        new Move(B7, A8), new Move(B7, C8), new Move(B7, A6), new Move(B7, C6)
+        new Move(B7, A8, Set.of()), new Move(B7, C8, Set.of()),
+        new Move(B7, A6, Set.of()), new Move(B7, C6, Set.of())
       ),
       new Situation(
         WHITE,

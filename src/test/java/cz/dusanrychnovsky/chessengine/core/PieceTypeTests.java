@@ -9,203 +9,182 @@ import java.util.Set;
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
-import static cz.dusanrychnovsky.chessengine.util.AssertExtensions.assertStreamSetEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PieceTypeTests {
 
-  // TODO: temporary placeholder until more advanced features are implemented (see PieceType)
-  private final Situation situation = new Situation(WHITE, new HashMap<>());
+    // TODO: temporary placeholder until more advanced features are implemented (see PieceType)
+    private final Situation situation = new Situation(WHITE, new HashMap<>());
 
-  @Test
-  public void rookMovesShouldContainFullRowAndColumn() {
-    assertStreamSetEquals(
-      Set.of(
-        // column
-        new Move(D3, D1), new Move(D3, D2), new Move(D3, D4),
-        new Move(D3, D5), new Move(D3, D6), new Move(D3, D7), new Move(D3, D8),
-        // row
-        new Move(D3, A3), new Move(D3, B3), new Move(D3, C3),
-        new Move(D3, E3), new Move(D3, F3), new Move(D3, G3), new Move(D3, H3)
-      ),
-      ROOK.getMovesTemplate(situation, D3));
-  }
+    @Test
+    public void rook_getMovePatterns_canMoveHorizontallyAndVertically() {
+        var moves = ROOK.getMovePatterns(situation, D3);
+        assertEquals(14, moves.size());
+        assertTrue(moves.contains(new Move(D3, E3, Set.of())));
+        assertTrue(moves.contains(new Move(D3, D5, Set.of(D4))));
+        assertTrue(moves.contains(new Move(D3, A3, Set.of(C3, B3))));
+    }
 
-  @Test
-  public void bishopMovesShouldContainBothDiagonals() {
-    assertStreamSetEquals(
-      Set.of(
-        // right diagonal
-        new Move(D3, B1), new Move(D3, C2), new Move(D3, E4), new Move(D3, F5),
-        new Move(D3, G6), new Move(D3, H7),
-        // left diagonal
-        new Move(D3, F1), new Move(D3, E2), new Move(D3, C4), new Move(D3, B5),
-        new Move(D3, A6)
-      ),
-      BISHOP.getMovesTemplate(situation, D3));
-  }
+    @Test
+    public void bishop_getMovePatterns_canMoveDiagonally() {
+        var moves = BISHOP.getMovePatterns(situation, D3);
+        assertEquals(11, moves.size());
+        assertTrue(moves.contains(new Move(D3, E4, Set.of())));
+        assertTrue(moves.contains(new Move(D3, F1, Set.of(E2))));
+        assertTrue(moves.contains(new Move(D3, A6, Set.of(C4, B5))));
+    }
 
-  @Test
-  public void queenMovesShouldContainFullRowAndColumnAndBothDiagonals() {
-    assertStreamSetEquals(
-      Set.of(
-        // column
-        new Move(D3, D1), new Move(D3, D2), new Move(D3, D4),
-        new Move(D3, D5), new Move(D3, D6), new Move(D3, D7), new Move(D3, D8),
-        // row
-        new Move(D3, A3), new Move(D3, B3), new Move(D3, C3),
-        new Move(D3, E3), new Move(D3, F3), new Move(D3, G3), new Move(D3, H3),
-        // right diagonal
-        new Move(D3, B1), new Move(D3, C2), new Move(D3, E4), new Move(D3, F5),
-        new Move(D3, G6), new Move(D3, H7),
-        // left diagonal
-        new Move(D3, F1), new Move(D3, E2), new Move(D3, C4), new Move(D3, B5),
-        new Move(D3, A6)
-      ),
-      QUEEN.getMovesTemplate(situation, D3)
-    );
-  }
+    @Test
+    public void bishop_getMovePatterns_fromCorner_canMoveAlongSingleDiagonal() {
+        var moves = BISHOP.getMovePatterns(situation, A1);
+        assertEquals(7, moves.size());
+        assertTrue(moves.contains(new Move(A1, B2, Set.of())));
+        assertTrue(moves.contains(new Move(A1, D4, Set.of(B2, C3))));
+    }
 
-  @Test
-  public void kingMovesShouldContainAllAdjacentFields() {
-    assertStreamSetEquals(
-      Set.of(
-        new Move(D3, C4), new Move(D3, D4), new Move(D3, E4),
-        new Move(D3, C3), new Move(D3, E3),
-        new Move(D3, C2), new Move(D3, D2), new Move(D3, E2)
-      ),
-      KING.getMovesTemplate(situation, D3)
-    );
-  }
+    @Test
+    public void queen_getMovePatterns_canMoveHorizontallyVerticallyAndDiagonally() {
+        var moves = QUEEN.getMovePatterns(situation, D3);
+        assertEquals(25, moves.size());
+        assertTrue(moves.contains(new Move(D3, E3, Set.of())));
+        assertTrue(moves.contains(new Move(D3, D5, Set.of(D4))));
+        assertTrue(moves.contains(new Move(D3, A3, Set.of(C3, B3))));
+        assertTrue(moves.contains(new Move(D3, E4, Set.of())));
+        assertTrue(moves.contains(new Move(D3, F1, Set.of(E2))));
+        assertTrue(moves.contains(new Move(D3, A6, Set.of(C4, B5))));
+    }
 
-  @Test
-  public void knightMovesShouldContainEightPositionsFromChessboardCenter() {
-    assertStreamSetEquals(
-      Set.of(
-        new Move(C5, D7), new Move(C5, E6), new Move(C5, E4), new Move(C5, D3),
-        new Move(C5, B3), new Move(C5, A4), new Move(C5, A6), new Move(C5, B7)
-      ),
-      KNIGHT.getMovesTemplate(situation, C5)
-    );
-  }
+    @Test
+    public void king_getMovePatterns_canMoveToAdjacentFields() {
+        var moves = KING.getMovePatterns(situation, D3);
+        assertEquals(8, moves.size());
+        assertTrue(moves.contains(new Move(D3, C4, Set.of())));
+        assertTrue(moves.contains(new Move(D3, D4, Set.of())));
+        assertTrue(moves.contains(new Move(D3, E4, Set.of())));
+        assertTrue(moves.contains(new Move(D3, C3, Set.of())));
+        assertTrue(moves.contains(new Move(D3, E3, Set.of())));
+        assertTrue(moves.contains(new Move(D3, C2, Set.of())));
+        assertTrue(moves.contains(new Move(D3, D2, Set.of())));
+        assertTrue(moves.contains(new Move(D3, E2, Set.of())));
+    }
 
-  @Test
-  public void knightMovesShouldContainTwoPositionsFromChessboardCorner() {
-    assertStreamSetEquals(
-      Set.of(new Move(A1, B3), new Move(A1, C2)),
-      KNIGHT.getMovesTemplate(situation, A1)
-    );
-  }
+    @Test
+    public void king_getMovePatterns_fromCorner_canOnlyMoveToThreeFields() {
+        var moves = KING.getMovePatterns(situation, A1);
+        assertEquals(3, moves.size());
+        assertTrue(moves.contains(new Move(A1, A2, Set.of())));
+        assertTrue(moves.contains(new Move(A1, B2, Set.of())));
+        assertTrue(moves.contains(new Move(A1, B1, Set.of())));
+    }
 
-  @Test
-  public void knightMovesShouldContainFourPositionsFromChessboardEdge() {
-    assertStreamSetEquals(
-      Set.of(
-        new Move(H5, G7), new Move(H5, F6), new Move(H5, F4), new Move(H5, G3)
-      ),
-      KNIGHT.getMovesTemplate(situation, H5)
-    );
-  }
+    @Test
+    public void knight_getMovePatterns_fromCenter_canMoveToEightFields() {
+        var moves = KNIGHT.getMovePatterns(situation, D3);
+        assertEquals(8, moves.size());
+        assertTrue(moves.contains(new Move(D3, F2, Set.of())));
+        assertTrue(moves.contains(new Move(D3, E1, Set.of())));
+        assertTrue(moves.contains(new Move(D3, C1, Set.of())));
+        assertTrue(moves.contains(new Move(D3, B2, Set.of())));
+        assertTrue(moves.contains(new Move(D3, B4, Set.of())));
+        assertTrue(moves.contains(new Move(D3, C5, Set.of())));
+        assertTrue(moves.contains(new Move(D3, E5, Set.of())));
+        assertTrue(moves.contains(new Move(D3, F4, Set.of())));
+    }
 
-  @Test
-  public void knightMovesShouldContainSixPositionsNearChessboardEdge() {
-    assertStreamSetEquals(
-      Set.of(
-        new Move(E7, G8), new Move(E7, G6), new Move(E7, F5),
-        new Move(E7, D5), new Move(E7, C6), new Move(E7, C8)
-      ),
-      KNIGHT.getMovesTemplate(situation, E7)
-    );
-  }
+    @Test
+    public void knight_getMovePatterns_fromCorner_canMoveToTwoFields() {
+        var moves = KNIGHT.getMovePatterns(situation, A1);
+        assertEquals(2, moves.size());
+        assertTrue(moves.contains(new Move(A1, C2, Set.of())));
+        assertTrue(moves.contains(new Move(A1, B3, Set.of())));
+    }
 
-  @Test
-  public void knightMovesShouldContainFourPositionsNearChessboardCorner() {
-    assertStreamSetEquals(
-      Set.of(
-        new Move(B7, D8), new Move(B7, D6), new Move(B7, C5), new Move(B7, A5)
-      ),
-      KNIGHT.getMovesTemplate(situation, B7)
-    );
-  }
+    @Test
+    public void knight_getMovePatterns_fromEdge_canMoveToFourFields() {
+        var moves = KNIGHT.getMovePatterns(situation, H5);
+        assertEquals(4, moves.size());
+        assertTrue(moves.contains(new Move(H5, G3, Set.of())));
+        assertTrue(moves.contains(new Move(H5, F4, Set.of())));
+        assertTrue(moves.contains(new Move(H5, F6, Set.of())));
+        assertTrue(moves.contains(new Move(H5, G7, Set.of())));
+    }
 
-  @Test
-  public void whitePawnShouldMoveUp() {
-    assertStreamSetEquals(
-      Set.of(new Move(E4, E5)),
-      PAWN.getMovesTemplate(
-        new Situation(
-          WHITE,
-          Map.of(
-            E4, new Piece(WHITE, PAWN)
-          )
-        ),
-        E4
-      )
-    );
-  }
+    @Test
+    public void knight_getMovePatterns_oneFieldAwayFromEdge_canMoveToSixFields() {
+        var moves = KNIGHT.getMovePatterns(situation, F7);
+        assertEquals(6, moves.size());
+        assertTrue(moves.contains(new Move(F7, H8, Set.of())));
+        assertTrue(moves.contains(new Move(F7, H6, Set.of())));
+        assertTrue(moves.contains(new Move(F7, G5, Set.of())));
+        assertTrue(moves.contains(new Move(F7, E5, Set.of())));
+        assertTrue(moves.contains(new Move(F7, D6, Set.of())));
+        assertTrue(moves.contains(new Move(F7, D8, Set.of())));
+    }
 
-  @Test
-  public void blackPawnShouldMoveDown() {
-    assertStreamSetEquals(
-      Set.of(new Move(D5, D4)),
-      PAWN.getMovesTemplate(
-        new Situation(
-          BLACK,
-          Map.of(
-            D5, new Piece(BLACK, PAWN)
-          )
-        ),
-        D5
-      )
-    );
-  }
+    @Test
+    public void pawn_getMovesTemplate_white_movesUp() {
+        var moves = PAWN.getMovePatterns(
+            new Situation(
+                WHITE,
+                Map.of(B5, new Piece(WHITE, PAWN))
+            ),
+            B5);
+        assertEquals(1, moves.size());
+        assertTrue(moves.contains(new Move(B5, B6, Set.of())));
+    }
 
-  @Test
-  public void whitePawnCanMoveTwoSquaresUpWhenFromInitialPosition() {
-    assertStreamSetEquals(
-      Set.of(new Move(E2, E3), new Move(E2, E4)),
-      PAWN.getMovesTemplate(
-        new Situation(
-          WHITE,
-          Map.of(
-            E2, new Piece(WHITE, PAWN)
-          )
-        ),
-        E2
-      )
-    );
-  }
+    @Test
+    public void pawn_getMovesTemplate_black_movesDown() {
+        var moves = PAWN.getMovePatterns(
+            new Situation(
+                BLACK,
+                Map.of(B5, new Piece(BLACK, PAWN))
+            ),
+            B5);
+        assertEquals(1, moves.size());
+        assertTrue(moves.contains(new Move(B5, B4, Set.of())));
+    }
 
-  @Test
-  public void blackPawnCanMoveTwoSquaresDownWhenFromInitialPosition() {
-    assertStreamSetEquals(
-      Set.of(new Move(D7, D6), new Move(D7, D5)),
-      PAWN.getMovesTemplate(
-        new Situation(
-          BLACK,
-          Map.of(
-            D7, new Piece(BLACK, PAWN)
-          )
-        ),
-        D7
-      )
-    );
-  }
+    @Test
+    public void pawn_getMovePatterns_white_fromInitialPosition_canMoveTwoFieldsUp() {
+        var moves = PAWN.getMovePatterns(
+            new Situation(
+                WHITE,
+                Map.of(B2, new Piece(WHITE, PAWN))
+            ),
+            B2);
+        assertEquals(2, moves.size());
+        assertTrue(moves.contains(new Move(B2, B3, Set.of())));
+        assertTrue(moves.contains(new Move(B2, B4, Set.of())));
+    }
 
-  @Test
-  public void pawnCanCapturePiecesWhichAreDirectlyAndDiagonallyInFrontOfThem() {
-    assertStreamSetEquals(
-      Set.of(new Move(E4, E5), new Move(E4, D5)),
-      PAWN.getMovesTemplate(
-        new Situation(
-          WHITE,
-          Map.of(
-            E4, new Piece(WHITE, PAWN),
-            D5, new Piece(BLACK, KNIGHT),
-            F5, new Piece(WHITE, PAWN)
-          )
-        ),
-        E4
-      )
-    );
-  }
+    @Test
+    public void pawn_getMovePatterns_black_fromInitialPosition_canMoveTwoFieldsDown() {
+        var moves = PAWN.getMovePatterns(
+            new Situation(
+                BLACK,
+                Map.of(B7, new Piece(BLACK, PAWN))
+            ),
+            B7);
+        assertEquals(2, moves.size());
+        assertTrue(moves.contains(new Move(B7, B6, Set.of())));
+        assertTrue(moves.contains(new Move(B7, B5, Set.of())));
+    }
+
+    @Test
+    public void pawn_getMovePatterns_canCapturePiecesWhichAreDirectlyAndDiagonallyInFrontOfThem() {
+        var moves = PAWN.getMovePatterns(
+            new Situation(
+                WHITE,
+                Map.of(
+                    B5, new Piece(WHITE, PAWN),
+                    C6, new Piece(BLACK, PAWN),
+                    C4, new Piece(BLACK, PAWN))
+            ),
+            B5);
+        assertEquals(2, moves.size());
+        assertTrue(moves.contains(new Move(B5, B6, Set.of())));
+        assertTrue(moves.contains(new Move(B5, C6, Set.of())));
+    }
 }
