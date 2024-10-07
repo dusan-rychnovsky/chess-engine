@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class SituationTests {
 
   @Test
-  public void getPieceAtReturnsPieceStandingOnGivenPositionOnTheBoard() {
+  public void getPieceAt_returnsPieceStandingOnGivenPosition() {
     assertEquals(
       Optional.of(new Piece(BLACK, KING)),
       new Situation(
@@ -32,7 +32,7 @@ public class SituationTests {
   }
 
   @Test
-  public void getPieceAtReturnsEmptyResultWhenNoPieceExistsOnGivenPositionOnTheBoard() {
+  public void getPieceAt_noPieceExistsOnGivenPosition_returnsEmptyResult() {
     assertEquals(
       Optional.empty(),
       new Situation(WHITE, new HashMap<>())
@@ -40,7 +40,7 @@ public class SituationTests {
   }
 
   @Test
-  public void getInitialReturnsInitialChessSituation() {
+  public void getInitial_returnsInitialChessSituation() {
     var situation = Situation.getInitial();
     // color
     assertEquals(WHITE, situation.getCurrentPlayer());
@@ -49,24 +49,19 @@ public class SituationTests {
       assertPieceAt(situation, Position.get(col, R2), WHITE, PAWN);
       assertPieceAt(situation, Position.get(col, R7), BLACK, PAWN);
     }
-    // white
-    assertPieceAt(situation, Position.get(CA, R1), WHITE, ROOK);
-    assertPieceAt(situation, Position.get(CB, R1), WHITE, KNIGHT);
-    assertPieceAt(situation, Position.get(CC, R1), WHITE, BISHOP);
-    assertPieceAt(situation, Position.get(CD, R1), WHITE, QUEEN);
-    assertPieceAt(situation, Position.get(CE, R1), WHITE, KING);
-    assertPieceAt(situation, Position.get(CF, R1), WHITE, BISHOP);
-    assertPieceAt(situation, Position.get(CG, R1), WHITE, KNIGHT);
-    assertPieceAt(situation, Position.get(CH, R1), WHITE, ROOK);
-    // black
-    assertPieceAt(situation, Position.get(CA, R8), BLACK, ROOK);
-    assertPieceAt(situation, Position.get(CB, R8), BLACK, KNIGHT);
-    assertPieceAt(situation, Position.get(CC, R8), BLACK, BISHOP);
-    assertPieceAt(situation, Position.get(CD, R8), BLACK, QUEEN);
-    assertPieceAt(situation, Position.get(CE, R8), BLACK, KING);
-    assertPieceAt(situation, Position.get(CF, R8), BLACK, BISHOP);
-    assertPieceAt(situation, Position.get(CG, R8), BLACK, KNIGHT);
-    assertPieceAt(situation, Position.get(CH, R8), BLACK, ROOK);
+    // other pieces
+    for (var entry : Map.of(WHITE, R1, BLACK, R8).entrySet()) {
+      var color = entry.getKey();
+      var row = entry.getValue();
+      assertPieceAt(situation, Position.get(CA, row), color, ROOK);
+      assertPieceAt(situation, Position.get(CB, row), color, KNIGHT);
+      assertPieceAt(situation, Position.get(CC, row), color, BISHOP);
+      assertPieceAt(situation, Position.get(CD, row), color, QUEEN);
+      assertPieceAt(situation, Position.get(CE, row), color, KING);
+      assertPieceAt(situation, Position.get(CF, row), color, BISHOP);
+      assertPieceAt(situation, Position.get(CG, row), color, KNIGHT);
+      assertPieceAt(situation, Position.get(CH, row), color, ROOK);
+    }
   }
 
   private void assertPieceAt(Situation situation, Position position, Color color, PieceType pieceType) {
@@ -78,7 +73,7 @@ public class SituationTests {
   }
 
   @Test
-  public void getValidMoves_BishopAndRook_CombinesValidMoves() {
+  public void getValidMoves_bishopAndRook_combinesValidMoves() {
     assertStreamSetEquals(
       Set.of(
         // bishop - two diagonals from B7
