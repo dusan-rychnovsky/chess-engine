@@ -7,6 +7,7 @@ import static cz.dusanrychnovsky.chessengine.core.Color.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
 import static cz.dusanrychnovsky.chessengine.util.MapExtensions.get;
+import static java.util.stream.Collectors.toSet;
 
 public class Situation {
 
@@ -50,11 +51,24 @@ public class Situation {
       var piece = entry.getValue();
       if (piece.color() == currentPlayer) {
         result.addAll(
-            piece.type().getMovePatterns(this, position)
+            piece.type()
+              .getMovePatterns(this, position)
+              .stream()
+              .filter(move -> isValid(piece, move))
+              .collect(toSet())
         );
       }
     }
     return result.stream();
+  }
+
+  private boolean isValid(Piece piece, Move move) {
+    for (var pos : move.intermediaries()) {
+      if (getPieceAt(pos).isPresent()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
