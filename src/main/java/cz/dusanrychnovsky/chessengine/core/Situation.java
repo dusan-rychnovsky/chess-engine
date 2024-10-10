@@ -63,11 +63,18 @@ public class Situation {
   }
 
   private boolean isValid(Piece piece, Move move) {
+    // intermediaries
     for (var pos : move.intermediaries()) {
       if (getPieceAt(pos).isPresent()) {
         return false;
       }
     }
+    // to piece
+    var toPiece = getPieceAt(move.to());
+    if (toPiece.isPresent() && toPiece.get().color() == currentPlayer) {
+      return false;
+    }
+
     return true;
   }
 

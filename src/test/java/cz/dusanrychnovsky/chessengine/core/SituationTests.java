@@ -118,7 +118,6 @@ public class SituationTests {
         // bishop
         new Move(B7, A8, Set.of()), new Move(B7, C8, Set.of()),
         new Move(B7, A6, Set.of()), new Move(B7, C6, Set.of()),
-        new Move(B7, D5, Set.of(C6)), // TODO: can't capture own pieces
         // pawn
         new Move(D5, D6, Set.of())
       ),
@@ -173,5 +172,31 @@ public class SituationTests {
         )
       ).getValidMoves()
     );
+  }
+
+  @Test
+  public void getValidMoves_canCaptureOpponentsPieces() {
+    assertStreamSetEquals(
+      Set.of(new Move(A1, B2, Set.of())),
+      new Situation(
+        WHITE,
+        Map.of(
+          A1, new Piece(WHITE, BISHOP),
+          B2, new Piece(BLACK, QUEEN)
+        )
+      ).getValidMoves()
+    );
+  }
+
+  @Test
+  public void getValidMoves_cantCaptureOwnPieces() {
+      var moves = new Situation(
+        WHITE,
+        Map.of(
+          A1, new Piece(WHITE, BISHOP),
+          B2, new Piece(WHITE, QUEEN)
+        )
+      ).getValidMoves();
+      assertFalse(moves.anyMatch(move -> move.from() == A1));
   }
 }
