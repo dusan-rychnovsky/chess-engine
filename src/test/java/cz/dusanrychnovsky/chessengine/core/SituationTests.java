@@ -12,7 +12,6 @@ import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
 import static cz.dusanrychnovsky.chessengine.core.Column.*;
-import static cz.dusanrychnovsky.chessengine.util.AssertExtensions.assertStreamSetEquals;
 import static org.junit.Assert.*;
 
 public class SituationTests {
@@ -73,7 +72,7 @@ public class SituationTests {
 
   @Test
   public void getValidMoves_bishopAndRook_combinesValidMoves() {
-    assertStreamSetEquals(
+    assertEquals(
       Set.of(
         // bishop - two diagonals from B7
         new Move(B7, A6, Set.of()),
@@ -113,7 +112,7 @@ public class SituationTests {
 
   @Test
   public void getValidMoves_regularPiecesCannotMoveThroughOtherPiecesOfSameColor() {
-    assertStreamSetEquals(
+    assertEquals(
       Set.of(
         // bishop
         new Move(B7, A8, Set.of()), new Move(B7, C8, Set.of()),
@@ -133,7 +132,7 @@ public class SituationTests {
 
   @Test
   public void getValidMoves_regularPiecesCannotMoveThroughOtherPiecesOfOtherColor() {
-    assertStreamSetEquals(
+    assertEquals(
       Set.of(
         // bishop
         new Move(B7, A8, Set.of()), new Move(B7, C8, Set.of()),
@@ -152,7 +151,7 @@ public class SituationTests {
 
   @Test
   public void getValidMoves_knightCanMoveThroughPiecesOfBothColors() {
-    assertStreamSetEquals(
+    assertEquals(
       Set.of(
         // knight
         new Move(A5, B7, Set.of()), new Move(A5, C6, Set.of()),
@@ -176,7 +175,7 @@ public class SituationTests {
 
   @Test
   public void getValidMoves_canCaptureOpponentsPieces() {
-    assertStreamSetEquals(
+    assertEquals(
       Set.of(new Move(A1, B2, Set.of())),
       new Situation(
         WHITE,
@@ -197,6 +196,7 @@ public class SituationTests {
           B2, new Piece(WHITE, QUEEN)
         )
       ).getValidMoves();
-      assertFalse(moves.anyMatch(move -> move.from() == A1));
+      assertFalse(moves.stream()
+        .anyMatch(move -> move.from() == A1));
   }
 }

@@ -1,7 +1,6 @@
 package cz.dusanrychnovsky.chessengine.core;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
@@ -44,7 +43,7 @@ public class Situation {
    * @return all moves which are valid in the represented situation,
    * by the current player
    */
-  public Stream<Move> getValidMoves() {
+  public Set<Move> getValidMoves() {
     var result = new HashSet<Move>();
     for (var entry : pieces.entrySet()) {
       var position = entry.getKey();
@@ -59,7 +58,7 @@ public class Situation {
         );
       }
     }
-    return result.stream();
+    return result;
   }
 
   private boolean isValid(Piece piece, Move move) {
