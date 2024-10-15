@@ -44,21 +44,33 @@ public class Situation {
    * by the current player
    */
   public Set<Move> getValidMoves() {
-    var result = new HashSet<Move>();
-    for (var entry : pieces.entrySet()) {
-      var position = entry.getKey();
-      var piece = entry.getValue();
-      if (piece.color() == currentPlayer) {
-        result.addAll(
-            piece.type()
-              .getMovePatterns(this, position)
-              .stream()
-              .filter(move -> isValid(piece, move))
-              .collect(toSet())
-        );
-      }
+    return pieces.entrySet().stream()
+      .flatMap(entry -> getValidMoves(entry.getValue(), entry.getKey()).stream())
+      .collect(toSet());
+  }
+
+  /**
+   * @return all moves which are valid for the given piece standing at
+   * the given position in the represented situation by the current player
+   */
+  public Set<Move> getValidMoves(Piece piece, Position position) {
+    if (getPieceAt(position).filter(p -> p.equals(piece)).isEmpty()) {
+      throw new IllegalArgumentException(
+        "Invalid starting position. Piece " + piece +
+        " is not present at position " + position + "."
+      );
     }
-    return result;
+
+    if (piece.color() == currentPlayer) {
+      return piece.type()
+        .getMovePatterns(this, position)
+        .stream()
+        .filter(move -> isValid(piece, move))
+        .collect(toSet());
+    }
+    else {
+      return Set.of();
+    }
   }
 
   private boolean isValid(Piece piece, Move move) {
