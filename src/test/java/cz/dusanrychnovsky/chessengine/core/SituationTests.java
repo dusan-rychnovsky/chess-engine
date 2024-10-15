@@ -199,4 +199,9 @@ public class SituationTests {
       assertFalse(moves.stream()
         .anyMatch(move -> move.from() == A1));
   }
+
+  @Test
+  public void getValidMoves_thereAreTwentyValidMovesFromInitialPosition() {
+    assertEquals(20, Situation.getInitial().getValidMoves().size());
+  }
 }
