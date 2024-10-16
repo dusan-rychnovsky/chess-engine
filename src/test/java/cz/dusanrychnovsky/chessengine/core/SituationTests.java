@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
+import static cz.dusanrychnovsky.chessengine.core.Piece.WHITE_BISHOP;
+import static cz.dusanrychnovsky.chessengine.core.Piece.WHITE_KNIGHT;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
@@ -114,19 +116,16 @@ public class SituationTests {
   public void getValidMoves_regularPiecesCannotMoveThroughOtherPiecesOfSameColor() {
     assertEquals(
       Set.of(
-        // bishop
         new Move(B7, A8, Set.of()), new Move(B7, C8, Set.of()),
-        new Move(B7, A6, Set.of()), new Move(B7, C6, Set.of()),
-        // pawn
-        new Move(D5, D6, Set.of())
+        new Move(B7, A6, Set.of()), new Move(B7, C6, Set.of())
       ),
       new Situation(
         WHITE,
         Map.of(
-          B7, new Piece(WHITE, BISHOP),
+          B7, WHITE_BISHOP,
           D5, new Piece(WHITE, PAWN)
         )
-      ).getValidMoves()
+      ).getValidMoves(WHITE_BISHOP, B7)
     );
   }
 
@@ -134,7 +133,6 @@ public class SituationTests {
   public void getValidMoves_regularPiecesCannotMoveThroughOtherPiecesOfOtherColor() {
     assertEquals(
       Set.of(
-        // bishop
         new Move(B7, A8, Set.of()), new Move(B7, C8, Set.of()),
         new Move(B7, A6, Set.of()), new Move(B7, C6, Set.of()),
         new Move(B7, D5, Set.of(C6))
@@ -153,23 +151,20 @@ public class SituationTests {
   public void getValidMoves_knightCanMoveThroughPiecesOfBothColors() {
     assertEquals(
       Set.of(
-        // knight
         new Move(A5, B7, Set.of()), new Move(A5, C6, Set.of()),
-        new Move(A5, C4, Set.of()), new Move(A5, B3, Set.of()),
-        // pawns
-        new Move(A6, A7, Set.of()), new Move(B6, B7, Set.of())
+        new Move(A5, C4, Set.of()), new Move(A5, B3, Set.of())
       ),
       new Situation(
         WHITE,
         Map.of(
-          A5, new Piece(WHITE, KNIGHT),
+          A5, WHITE_KNIGHT,
           A4, new Piece(BLACK, PAWN),
           B4, new Piece(BLACK, PAWN),
           B5, new Piece(BLACK, PAWN),
           A6, new Piece(WHITE, PAWN),
           B6, new Piece(WHITE, PAWN)
         )
-      ).getValidMoves()
+      ).getValidMoves(WHITE_KNIGHT, A5)
     );
   }
 
@@ -189,19 +184,33 @@ public class SituationTests {
 
   @Test
   public void getValidMoves_cantCaptureOwnPieces() {
-      var moves = new Situation(
-        WHITE,
-        Map.of(
-          A1, new Piece(WHITE, BISHOP),
-          B2, new Piece(WHITE, QUEEN)
-        )
-      ).getValidMoves();
-      assertFalse(moves.stream()
-        .anyMatch(move -> move.from() == A1));
+    var moves = new Situation(
+      WHITE,
+      Map.of(
+        A1, WHITE_BISHOP,
+        B2, new Piece(WHITE, QUEEN)
+      )
+    ).getValidMoves(WHITE_BISHOP, A1);
+    assertEquals(0, moves.size());
   }
 
   @Test
   public void getValidMoves_thereAreTwentyValidMovesFromInitialPosition() {
     assertEquals(20, Situation.getInitial().getValidMoves().size());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void getValidMoves_fromInvalidPosition_throws() {
+    new Situation(WHITE, Map.of()).getValidMoves(WHITE_BISHOP, A1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void getValidMoves_withInvalidPiece_throws() {
+    new Situation(
+      WHITE,
+      Map.of(
+        A1, WHITE_BISHOP
+      )
+    ).getValidMoves(WHITE_KNIGHT, A1);
   }
 }
