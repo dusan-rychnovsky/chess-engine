@@ -90,6 +90,34 @@ public class Situation {
   }
 
   /**
+   * @return true if the represented situation is a check. A situation is
+   * a check whenever the current player's king is attacked by an enemy piece.
+   */
+  public boolean isCheck() {
+    var kingPos = getKingsPosition(currentPlayer);
+    if (kingPos.isEmpty()) {
+      throw new IllegalStateException(
+        "King pieces must always be present in any valid situation."
+      );
+    }
+
+    var opponentsView = new Situation(currentPlayer.getOpposite(), pieces);
+    var opponentsMoves = opponentsView.getValidMoves();
+    return opponentsMoves.stream()
+      .anyMatch(move -> move.to() == kingPos.get());
+  }
+
+  private Optional<Position> getKingsPosition(Color color) {
+    return pieces.entrySet().stream()
+      .filter(entry -> {
+        var piece = entry.getValue();
+        return piece.color() == color && piece.type() == KING;
+      })
+      .map(Map.Entry::getKey)
+      .findFirst();
+  }
+
+  /**
    * @return the piece which currently occupies the given position on the
    * board, if any
    */

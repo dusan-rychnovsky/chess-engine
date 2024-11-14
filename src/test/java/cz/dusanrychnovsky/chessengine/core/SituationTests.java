@@ -213,4 +213,73 @@ public class SituationTests {
       )
     ).getValidMoves(WHITE_KNIGHT, A1);
   }
+
+  @Test
+  public void isCheck_kingUnderAttack_returnsTrue() {
+    assertTrue(
+      new Situation(
+        WHITE,
+        Map.of(
+          F5, new Piece(WHITE, KING),
+          C5, new Piece(BLACK, ROOK)
+        )
+      ).isCheck()
+    );
+  }
+
+  @Test
+  public void isCheck_kingNotUnderAttack_returnsFalse() {
+    assertFalse(
+      new Situation(
+        WHITE,
+        Map.of(
+          F5, new Piece(WHITE, KING),
+          C6, new Piece(BLACK, ROOK)
+        )
+      ).isCheck()
+    );
+  }
+
+  @Test
+  public void isCheck_kingCoveredByOwnPiece_returnsFalse() {
+    assertFalse(
+      new Situation(
+        WHITE,
+        Map.of(
+          F5, new Piece(WHITE, KING),
+          E5, new Piece(WHITE, PAWN),
+          C5, new Piece(BLACK, ROOK)
+        )
+      ).isCheck()
+    );
+  }
+
+  @Test
+  public void isCheck_kingCoveredByEnemyPiece_returnsFalse() {
+    assertFalse(
+      new Situation(
+        WHITE,
+        Map.of(
+          F5, new Piece(WHITE, KING),
+          E5, new Piece(BLACK, PAWN),
+          C5, new Piece(BLACK, ROOK)
+        )
+      ).isCheck()
+    );
+  }
+
+  @Test
+  public void isCheck_kingCoveredByOwnPieces_KnightMovesThrough() {
+    assertTrue(
+      new Situation(
+        BLACK,
+        Map.of(
+          B8, new Piece(BLACK, KING),
+          B7, new Piece(BLACK, PAWN),
+          C7, new Piece(BLACK, PAWN),
+          C6, new Piece(WHITE, KNIGHT)
+        )
+      ).isCheck()
+    );
+  }
 }
