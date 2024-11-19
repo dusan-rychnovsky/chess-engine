@@ -341,4 +341,26 @@ public class SituationTests {
       )
     );
   }
+
+  @Test
+  public void apply_appliesTheGivenMove() {
+    assertEquals(
+      new Situation(
+        BLACK,
+        Map.of(
+          F5, WHITE_KING,
+          G7, WHITE_PAWN,
+          G8, BLACK_KING
+        )
+      ),
+      new Situation(
+        WHITE,
+        Map.of(
+          F5, WHITE_KING,
+          G6, WHITE_PAWN,
+          G8, BLACK_KING
+        )
+      ).apply(new Move(G6, G7, Set.of()))
+    );
+  }
 }

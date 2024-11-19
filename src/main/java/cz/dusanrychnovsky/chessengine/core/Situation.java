@@ -118,6 +118,25 @@ public class Situation {
   }
 
   /**
+   * @return situation which represents the result of applying the given move
+   * to the represented situation.
+   *
+   * Note: Doesn't test validity of the give move.
+   */
+  public Situation apply(Move move) {
+    var piece = getPieceAt(move.from()).orElseThrow(
+      () -> new IllegalArgumentException("No piece exists at " + move.from())
+    );
+    var nextPieces = new HashMap<>(this.pieces);
+    nextPieces.remove(move.from());
+    nextPieces.put(move.to(), piece);
+    return new Situation(
+      this.currentPlayer.getOpposite(),
+      nextPieces
+    );
+  }
+
+  /**
    * @return the piece which currently occupies the given position on the
    * board, if any
    */
