@@ -128,4 +128,22 @@ public class Situation {
   public Color getCurrentPlayer() {
     return currentPlayer;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof Situation other)) {
+      return false;
+    }
+    return
+        this.currentPlayer == other.currentPlayer &&
+        this.pieces.equals(other.pieces);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(currentPlayer, pieces);
+  }
 }

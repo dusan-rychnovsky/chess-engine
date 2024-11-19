@@ -8,8 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static cz.dusanrychnovsky.chessengine.core.Color.*;
-import static cz.dusanrychnovsky.chessengine.core.Piece.WHITE_BISHOP;
-import static cz.dusanrychnovsky.chessengine.core.Piece.WHITE_KNIGHT;
+import static cz.dusanrychnovsky.chessengine.core.Piece.*;
 import static cz.dusanrychnovsky.chessengine.core.PieceType.*;
 import static cz.dusanrychnovsky.chessengine.core.Position.*;
 import static cz.dusanrychnovsky.chessengine.core.Row.*;
@@ -280,6 +279,66 @@ public class SituationTests {
           C6, new Piece(WHITE, KNIGHT)
         )
       ).isCheck()
+    );
+  }
+
+  @Test
+  public void equals_samePiecesLocatedAtSamePositionsAndSameCurrentPlayer_areEqual() {
+    var first = new Situation(
+      BLACK,
+      Map.of(
+        B8, BLACK_KING,
+        D8, WHITE_KING
+      )
+    );
+    var second = new Situation(
+      BLACK,
+      Map.of(
+        B8, BLACK_KING,
+        D8, WHITE_KING
+      )
+    );
+    assertEquals(first, second);
+    assertEquals(first.hashCode(), second.hashCode());
+  }
+
+  @Test
+  public void equals_differentCurrentPlayer_areNotEqual() {
+    assertNotEquals(
+      new Situation(
+        BLACK,
+        Map.of(
+          B8, BLACK_KING,
+          D8, WHITE_KING
+        )
+      ),
+      new Situation(
+        WHITE,
+        Map.of(
+          B8, BLACK_KING,
+          D8, WHITE_KING
+        )
+      )
+    );
+  }
+
+  @Test
+  public void equals_differentPieces_areNotEqual() {
+    assertNotEquals(
+      new Situation(
+        BLACK,
+        Map.of(
+          B8, BLACK_KING,
+          D8, WHITE_BISHOP
+        )
+      ),
+      new Situation(
+        BLACK,
+        Map.of(
+          B8, BLACK_KING,
+          D8, WHITE_KING
+        )
+      )
     );
   }
 }
