@@ -13,22 +13,23 @@ enum class PieceType {
     },
     BISHOP {
         override fun moves(from: Position): Set<Move> {
-            return emptySet()
+            val moves = mutableSetOf<Move>()
+            for (direction in Directions.DIAGONAL) {
+                generateSequence(from) { direction(it) }
+                    .forEach { moves.add(Move(from, it)) }
+            }
+            moves.remove(Move(from, from))
+            return moves
         }
     },
     ROOK {
         override fun moves(from: Position): Set<Move> {
             val moves = mutableSetOf<Move>()
-            for (col in Column.entries) {
-                if (col != from.column) {
-                    moves.add(Move(from, Position(col, from.row)))
-                }
+            for (direction in (Directions.HORIZONTAL + Directions.VERTICAL)) {
+                generateSequence(from) { direction(it) }
+                    .forEach { moves.add(Move(from, it)) }
             }
-            for (row in Row.entries) {
-                if (row != from.row) {
-                    moves.add(Move(from, Position(from.column, row)))
-                }
-            }
+            moves.remove(Move(from, from))
             return moves
         }
     },
