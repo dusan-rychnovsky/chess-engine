@@ -1,41 +1,41 @@
 package cz.dusanrychnovsky.chessengine
 
-typealias Direction = (Position) -> Position?
+typealias Direction = (Square) -> Square?
 
 object Directions {
-    val LEFT: Direction = { pos -> pos.column.prev()?.let { Position(it, pos.row) } }
-    val RIGHT: Direction = { pos -> pos.column.next()?.let { Position(it, pos.row) } }
+    val LEFT: Direction = { square -> square.column.prev()?.let { Square(it, square.row) } }
+    val RIGHT: Direction = { square -> square.column.next()?.let { Square(it, square.row) } }
     val HORIZONTAL = setOf(LEFT, RIGHT)
 
-    val DOWN: Direction = { pos -> pos.row.prev()?.let { Position(pos.column, it) } }
-    val UP: Direction = { pos -> pos.row.next()?.let { Position(pos.column, it) } }
+    val DOWN: Direction = { square -> square.row.prev()?.let { Square(square.column, it) } }
+    val UP: Direction = { square -> square.row.next()?.let { Square(square.column, it) } }
     val VERTICAL = setOf(DOWN, UP)
 
-    val UP_RIGHT: Direction = { pos ->
-        pos.column.next()?.let { col ->
-            pos.row.next()?.let { row ->
-                Position(col, row)
+    val UP_RIGHT: Direction = { square ->
+        square.column.next()?.let { col ->
+            square.row.next()?.let { row ->
+                Square(col, row)
             }
         }
     }
-    val UP_LEFT: Direction = { pos ->
-        pos.column.prev()?.let { col ->
-            pos.row.next()?.let { row ->
-                Position(col, row)
+    val UP_LEFT: Direction = { square ->
+        square.column.prev()?.let { col ->
+            square.row.next()?.let { row ->
+                Square(col, row)
             }
         }
     }
-    val DOWN_RIGHT: Direction = { pos ->
-        pos.column.next()?.let { col ->
-            pos.row.prev()?.let { row ->
-                Position(col, row)
+    val DOWN_RIGHT: Direction = { square ->
+        square.column.next()?.let { col ->
+            square.row.prev()?.let { row ->
+                Square(col, row)
             }
         }
     }
-    val DOWN_LEFT: Direction = { pos ->
-        pos.column.prev()?.let { col ->
-            pos.row.prev()?.let { row ->
-                Position(col, row)
+    val DOWN_LEFT: Direction = { square ->
+        square.column.prev()?.let { col ->
+            square.row.prev()?.let { row ->
+                Square(col, row)
             }
         }
     }

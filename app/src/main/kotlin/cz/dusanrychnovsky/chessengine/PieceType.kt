@@ -2,12 +2,12 @@ package cz.dusanrychnovsky.chessengine
 
 enum class PieceType {
     PAWN {
-        override fun moves(from: Position): Set<Move> {
+        override fun moves(from: Square): Set<Move> {
             return emptySet()
         }
     },
     KNIGHT {
-        override fun moves(from: Position): Set<Move> {
+        override fun moves(from: Square): Set<Move> {
             fun offset(col: (Column) -> Column?, row: (Row) -> Row?) = Pair(col, row)
             val offsets = listOf(
                 offset({ it.next()?.next() }, { it.next() }), // right-up
@@ -20,9 +20,9 @@ enum class PieceType {
                 offset({ it.prev() }, { it.prev()?.prev() })  // left-down
             )
             return offsets.mapNotNull { (colOffset, rowOffset) ->
-                var pos = from.next(colOffset, rowOffset)
-                if (pos != null) {
-                    Move(from, pos)
+                val square = from.next(colOffset, rowOffset)
+                if (square != null) {
+                    Move(from, square)
                 } else {
                     null
                 }
@@ -30,22 +30,22 @@ enum class PieceType {
         }
     },
     BISHOP {
-        override fun moves(from: Position): Set<Move> {
+        override fun moves(from: Square): Set<Move> {
             return closure(from, Directions.DIAGONAL)
         }
     },
     ROOK {
-        override fun moves(from: Position): Set<Move> {
+        override fun moves(from: Square): Set<Move> {
             return closure(from, Directions.HORIZONTAL + Directions.VERTICAL)
         }
     },
     QUEEN {
-        override fun moves(from: Position): Set<Move> {
+        override fun moves(from: Square): Set<Move> {
             return closure(from, Directions.HORIZONTAL + Directions.VERTICAL + Directions.DIAGONAL)
         }
     },
     KING {
-        override fun moves(from: Position): Set<Move> {
+        override fun moves(from: Square): Set<Move> {
             return (Directions.HORIZONTAL + Directions.VERTICAL + Directions.DIAGONAL)
                 .mapNotNull { direction -> direction(from) }
                 .map { to -> Move(from, to) }
@@ -53,9 +53,9 @@ enum class PieceType {
         }
     };
 
-    abstract fun moves(from: Position): Set<Move>
+    abstract fun moves(from: Square): Set<Move>
 
-    protected fun closure(from: Position, directions: Collection<Direction>): Set<Move> =
+    protected fun closure(from: Square, directions: Collection<Direction>): Set<Move> =
         directions.flatMap { direction ->
             val start = direction(from) // skip the 'from' position
             generateSequence(start) { direction(it) }

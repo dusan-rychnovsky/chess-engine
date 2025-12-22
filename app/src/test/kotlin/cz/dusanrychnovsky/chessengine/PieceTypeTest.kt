@@ -10,7 +10,7 @@ class PieceTypeTest {
 
     @Test
     fun rook_movesHorizontallyAndVertically() {
-        val moves = ROOK.moves(Position(CC, R4));
+        val moves = ROOK.moves(Square(CC, R4));
         assertEquals(
             setOf(
                 // vertically
@@ -35,7 +35,7 @@ class PieceTypeTest {
 
     @Test
     fun bishop_fromCorner_movesDiagonally() {
-        val moves = BISHOP.moves(Position(CA, R1));
+        val moves = BISHOP.moves(Square(CA, R1));
         assertEquals(
             setOf(
                 // up-right
@@ -52,7 +52,7 @@ class PieceTypeTest {
 
     @Test
     fun bishop_fromCenter_movesDiagonally() {
-        val moves = BISHOP.moves(Position(CD, R4));
+        val moves = BISHOP.moves(Square(CD, R4));
         assertEquals(
             setOf(
                 // up-right
@@ -78,7 +78,7 @@ class PieceTypeTest {
 
     @Test
     fun queen_movesHorizontallyVerticallyAnCDiagonally() {
-        val moves = QUEEN.moves(Position(CD, R4));
+        val moves = QUEEN.moves(Square(CD, R4));
         assertEquals(
             setOf(
                 // vertically
@@ -120,7 +120,7 @@ class PieceTypeTest {
 
     @Test
     fun king_fromCenter_movesOneSquareInAllDirections() {
-        val moves = KING.moves(Position(CD, R4))
+        val moves = KING.moves(Square(CD, R4))
         assertEquals(
             setOf(
                 move(CD, R4, CC, R4), // left
@@ -138,7 +138,7 @@ class PieceTypeTest {
 
     @Test
     fun king_fromCorner_movesOnlyToValidSquares() {
-        val moves = KING.moves(Position(CA, R1))
+        val moves = KING.moves(Square(CA, R1))
         assertEquals(
             setOf(
                 move(CA, R1, CB, R1), // right
@@ -151,7 +151,7 @@ class PieceTypeTest {
 
     @Test
     fun king_fromSide_movesOnlyToValidSquares() {
-        val moves = KING.moves(Position(CA, R4))
+        val moves = KING.moves(Square(CA, R4))
         assertEquals(
             setOf(
                 move(CA, R4, CA, R3), // down
@@ -166,7 +166,7 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromCenter_movesInLShape() {
-        val moves = KNIGHT.moves(Position(CD, R4))
+        val moves = KNIGHT.moves(Square(CD, R4))
         assertEquals(
             setOf(
                 move(CD, R4, CE, R6), // up 2, right 1
@@ -184,7 +184,7 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromCorner_movesOnlyToValidSquares() {
-        val moves = KNIGHT.moves(Position(CA, R1))
+        val moves = KNIGHT.moves(Square(CA, R1))
         assertEquals(
             setOf(
                 move(CA, R1, CB, R3), // up 2, right 1
@@ -196,7 +196,7 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromSide_movesOnlyToValidSquares() {
-        val moves = KNIGHT.moves(Position(CA, R4))
+        val moves = KNIGHT.moves(Square(CA, R4))
         assertEquals(
             setOf(
                 move(CA, R4, CB, R6), // up 2, right 1
@@ -209,5 +209,5 @@ class PieceTypeTest {
     }
 
     private fun move(fromColumn: Column, fromRow: Row, toColumn: Column, toRow: Row) =
-        Move(Position(fromColumn, fromRow), Position(toColumn, toRow))
+        Move(Square(fromColumn, fromRow), Square(toColumn, toRow))
 }
