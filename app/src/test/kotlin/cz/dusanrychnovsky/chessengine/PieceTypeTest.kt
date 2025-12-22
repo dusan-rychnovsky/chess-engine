@@ -118,6 +118,52 @@ class PieceTypeTest {
             moves)
     }
 
+    @Test
+    fun king_fromCenter_movesOneSquareInAllDirections() {
+        val moves = KING.moves(Position(CD, R4))
+        assertEquals(
+            setOf(
+                move(CD, R4, CC, R4), // left
+                move(CD, R4, CE, R4), // right
+                move(CD, R4, CD, R3), // down
+                move(CD, R4, CD, R5), // up
+                move(CD, R4, CC, R3), // down-left
+                move(CD, R4, CE, R3), // down-right
+                move(CD, R4, CC, R5), // up-left
+                move(CD, R4, CE, R5)  // up-right
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun king_fromCorner_movesOnlyToValidSquares() {
+        val moves = KING.moves(Position(CA, R1))
+        assertEquals(
+            setOf(
+                move(CA, R1, CB, R1), // right
+                move(CA, R1, CA, R2), // up
+                move(CA, R1, CB, R2)  // up-right
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun king_fromSide_movesOnlyToValidSquares() {
+        val moves = KING.moves(Position(CA, R4))
+        assertEquals(
+            setOf(
+                move(CA, R4, CA, R3), // down
+                move(CA, R4, CA, R5), // up
+                move(CA, R4, CB, R3), // down-right
+                move(CA, R4, CB, R4), // right
+                move(CA, R4, CB, R5)  // up-right
+            ),
+            moves
+        )
+    }
+
     private fun move(fromColumn: Column, fromRow: Row, toColumn: Column, toRow: Row) =
         Move(Position(fromColumn, fromRow), Position(toColumn, toRow))
 }

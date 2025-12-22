@@ -28,7 +28,10 @@ enum class PieceType {
     },
     KING {
         override fun moves(from: Position): Set<Move> {
-            return emptySet()
+            return (Directions.HORIZONTAL + Directions.VERTICAL + Directions.DIAGONAL)
+                .mapNotNull({ direction -> direction(from) })
+                .map({ to -> Move(from, to) })
+                .toSet()
         }
     };
 
