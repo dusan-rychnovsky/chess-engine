@@ -164,6 +164,50 @@ class PieceTypeTest {
         )
     }
 
+    @Test
+    fun knight_fromCenter_movesInLShape() {
+        val moves = KNIGHT.moves(Position(CD, R4))
+        assertEquals(
+            setOf(
+                move(CD, R4, CE, R6), // up 2, right 1
+                move(CD, R4, CC, R6), // up 2, left 1
+                move(CD, R4, CE, R2), // down 2, right 1
+                move(CD, R4, CC, R2), // down 2, left 1
+                move(CD, R4, CF, R5), // right 2, up 1
+                move(CD, R4, CF, R3), // right 2, down 1
+                move(CD, R4, CB, R5), // left 2, up 1
+                move(CD, R4, CB, R3)  // left 2, down 1
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun knight_fromCorner_movesOnlyToValidSquares() {
+        val moves = KNIGHT.moves(Position(CA, R1))
+        assertEquals(
+            setOf(
+                move(CA, R1, CB, R3), // up 2, right 1
+                move(CA, R1, CC, R2)  // right 2, up 1
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun knight_fromSide_movesOnlyToValidSquares() {
+        val moves = KNIGHT.moves(Position(CA, R4))
+        assertEquals(
+            setOf(
+                move(CA, R4, CB, R6), // up 2, right 1
+                move(CA, R4, CB, R2), // down 2, right 1
+                move(CA, R4, CC, R5), // right 2, up 1
+                move(CA, R4, CC, R3)  // right 2, down 1
+            ),
+            moves
+        )
+    }
+
     private fun move(fromColumn: Column, fromRow: Row, toColumn: Column, toRow: Row) =
         Move(Position(fromColumn, fromRow), Position(toColumn, toRow))
 }
