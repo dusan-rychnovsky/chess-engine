@@ -76,6 +76,48 @@ class PieceTypeTest {
             moves)
     }
 
+    @Test
+    fun queen_movesHorizontallyVerticallyAnCDiagonally() {
+        val moves = QUEEN.moves(Position(CD, R4));
+        assertEquals(
+            setOf(
+                // vertically
+                move(CD, R4, CD, R1),
+                move(CD, R4, CD, R2),
+                move(CD, R4, CD, R3),
+                move(CD, R4, CD, R5),
+                move(CD, R4, CD, R6),
+                move(CD, R4, CD, R7),
+                move(CD, R4, CD, R8),
+                // horizontally
+                move(CD, R4, CA, R4),
+                move(CD, R4, CB, R4),
+                move(CD, R4, CC, R4),
+                move(CD, R4, CE, R4),
+                move(CD, R4, CF, R4),
+                move(CD, R4, CG, R4),
+                move(CD, R4, CH, R4),
+                // up-right
+                move(CD, R4, CE, R5),
+                move(CD, R4, CF, R6),
+                move(CD, R4, CG, R7),
+                move(CD, R4, CH, R8),
+                // up-left
+                move(CD, R4, CC, R5),
+                move(CD, R4, CB, R6),
+                move(CD, R4, CA, R7),
+                // down-right
+                move(CD, R4, CE, R3),
+                move(CD, R4, CF, R2),
+                move(CD, R4, CG, R1),
+                // down-left
+                move(CD, R4, CC, R3),
+                move(CD, R4, CB, R2),
+                move(CD, R4,CA, R1)
+            ),
+            moves)
+    }
+
     private fun move(fromColumn: Column, fromRow: Row, toColumn: Column, toRow: Row) =
         Move(Position(fromColumn, fromRow), Position(toColumn, toRow))
 }

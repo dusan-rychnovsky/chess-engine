@@ -13,29 +13,17 @@ enum class PieceType {
     },
     BISHOP {
         override fun moves(from: Position): Set<Move> {
-            val moves = mutableSetOf<Move>()
-            for (direction in Directions.DIAGONAL) {
-                generateSequence(from) { direction(it) }
-                    .forEach { moves.add(Move(from, it)) }
-            }
-            moves.remove(Move(from, from))
-            return moves
+            return closure(from, Directions.DIAGONAL)
         }
     },
     ROOK {
         override fun moves(from: Position): Set<Move> {
-            val moves = mutableSetOf<Move>()
-            for (direction in (Directions.HORIZONTAL + Directions.VERTICAL)) {
-                generateSequence(from) { direction(it) }
-                    .forEach { moves.add(Move(from, it)) }
-            }
-            moves.remove(Move(from, from))
-            return moves
+            return closure(from, Directions.HORIZONTAL + Directions.VERTICAL)
         }
     },
     QUEEN {
         override fun moves(from: Position): Set<Move> {
-            return emptySet()
+            return closure(from, Directions.HORIZONTAL + Directions.VERTICAL + Directions.DIAGONAL)
         }
     },
     KING {
@@ -45,4 +33,11 @@ enum class PieceType {
     };
 
     abstract fun moves(from: Position): Set<Move>
+
+    protected fun closure(from: Position, directions: Collection<Direction>): Set<Move> =
+        directions.flatMap { direction ->
+            val start = direction(from) // skip the 'from' position
+            generateSequence(start) { direction(it) }
+                .map { Move(from, it) }
+        }.toSet()
 }
