@@ -1,5 +1,10 @@
 package cz.dusanrychnovsky.chessengine
 
+import cz.dusanrychnovsky.chessengine.Directions.DOWN
+import cz.dusanrychnovsky.chessengine.Directions.LEFT
+import cz.dusanrychnovsky.chessengine.Directions.RIGHT
+import cz.dusanrychnovsky.chessengine.Directions.UP
+
 enum class PieceType {
     PAWN {
         override fun moves(from: Square): Set<Move> {
@@ -8,25 +13,24 @@ enum class PieceType {
     },
     KNIGHT {
         override fun moves(from: Square): Set<Move> {
-            fun offset(col: (Column) -> Column?, row: (Row) -> Row?) = Pair(col, row)
-            val offsets = listOf(
-                offset({ it.next()?.next() }, { it.next() }), // right-up
-                offset({ it.next()?.next() }, { it.prev() }), // right-down
-                offset({ it.prev()?.prev() }, { it.next() }), // left-up
-                offset({ it.prev()?.prev() }, { it.prev() }), // left-down
-                offset({ it.next() }, { it.next()?.next() }), // right-up
-                offset({ it.next() }, { it.prev()?.prev() }), // right-down
-                offset({ it.prev() }, { it.next()?.next() }), // left-up
-                offset({ it.prev() }, { it.prev()?.prev() })  // left-down
-            )
-            return offsets.mapNotNull { (colOffset, rowOffset) ->
-                val square = from.next(colOffset, rowOffset)
-                if (square != null) {
-                    Move(from, square)
-                } else {
-                    null
+            var directions = setOf(
+                listOf(UP, UP, RIGHT),
+                listOf(UP, RIGHT, RIGHT),
+                listOf(DOWN, RIGHT, RIGHT),
+                listOf(DOWN, DOWN, RIGHT),
+                listOf(DOWN, DOWN, LEFT),
+                listOf(DOWN, LEFT, LEFT),
+                listOf(UP, LEFT, LEFT),
+                listOf(UP, UP, LEFT)
+            );
+            return directions
+                .mapNotNull { dirs ->
+                    dirs.fold(from as Square?) { acc, direction ->
+                        acc?.let { direction(it) }
+                    }
                 }
-            }.toSet()
+                .map { to -> Move(from, to) }
+                .toSet()
         }
     },
     BISHOP {
