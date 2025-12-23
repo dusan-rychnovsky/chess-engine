@@ -1,21 +1,11 @@
 package cz.dusanrychnovsky.chessengine
 
-enum class Column {
+import cz.dusanrychnovsky.chessengine.extensions.next
+import cz.dusanrychnovsky.chessengine.extensions.prev
+
+enum class Column : Navigable<Column> {
     CA, CB, CC, CD, CE, CF, CG, CH;
 
-    fun next(): Column? {
-        return if (ordinal < entries.size - 1) {
-            entries[ordinal + 1]
-        } else {
-            null
-        }
-    }
-
-    fun prev(): Column? {
-        return if (ordinal > 0) {
-            entries[ordinal - 1]
-        } else {
-            null
-        }
-    }
+    override fun next(): Column? = this.next<Column>()
+    override fun prev(): Column? = this.prev<Column>()
 }

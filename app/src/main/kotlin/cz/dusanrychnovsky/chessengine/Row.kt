@@ -1,21 +1,11 @@
 package cz.dusanrychnovsky.chessengine
 
-enum class Row {
+import cz.dusanrychnovsky.chessengine.extensions.next
+import cz.dusanrychnovsky.chessengine.extensions.prev
+
+enum class Row : Navigable<Row> {
     R1, R2, R3, R4, R5, R6, R7, R8;
 
-    fun next(): Row? {
-        return if (ordinal < entries.size - 1) {
-            entries[ordinal + 1]
-        } else {
-            null
-        }
-    }
-
-    fun prev(): Row? {
-        return if (ordinal > 0) {
-            entries[ordinal - 1]
-        } else {
-            null
-        }
-    }
+    override fun next(): Row? = this.next<Row>()
+    override fun prev(): Row? = this.prev<Row>()
 }
