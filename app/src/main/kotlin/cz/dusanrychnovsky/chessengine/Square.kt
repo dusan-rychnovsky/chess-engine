@@ -32,8 +32,10 @@ enum class Square(val column: Column, val row: Row) {
     }
 
     companion object {
+        private val cache: Map<Pair<Column, Row>, Square> = entries.associateBy { it.column to it.row }
+
         operator fun invoke(column: Column, row: Row): Square {
-            return entries.find { it.column == column && it.row == row }
+            return cache[column to row]
                 ?: throw IllegalArgumentException("Invalid square with column $column, row $row.")
         }
     }
