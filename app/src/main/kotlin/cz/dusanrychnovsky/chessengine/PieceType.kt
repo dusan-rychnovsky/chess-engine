@@ -29,7 +29,7 @@ enum class PieceType {
                         acc?.let { direction(it) }
                     }
                 }
-                .map { to -> Move(from, to) }
+                .map { to -> Move(from, to, emptyList()) }
                 .toSet()
         }
     },
@@ -52,17 +52,24 @@ enum class PieceType {
         override fun moves(from: Square): Set<Move> {
             return (Directions.HORIZONTAL + Directions.VERTICAL + Directions.DIAGONAL)
                 .mapNotNull { direction -> direction(from) }
-                .map { to -> Move(from, to) }
+                .map { to -> Move(from, to, emptyList()) }
                 .toSet()
         }
     };
 
     abstract fun moves(from: Square): Set<Move>
 
-    protected fun closure(from: Square, directions: Collection<Direction>): Set<Move> =
-        directions.flatMap { direction ->
-            val start = direction(from) // skip the 'from' position
-            generateSequence(start) { direction(it) }
-                .map { Move(from, it) }
-        }.toSet()
+    protected fun closure(from: Square, directions: Collection<Direction>): Set<Move> {
+        val moves = mutableSetOf<Move>()
+        for (direction in directions) {
+            val through = mutableListOf<Square>();
+            var next = direction(from)
+            while (next != null) {
+                moves.add(Move(from, next, through.toList()))
+                through.add(next)
+                next = direction(next)
+            }
+        }
+        return moves;
+    }
 }

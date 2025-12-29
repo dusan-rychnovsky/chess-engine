@@ -1,8 +1,7 @@
 package cz.dusanrychnovsky.chessengine
 
-import cz.dusanrychnovsky.chessengine.Column.*
 import cz.dusanrychnovsky.chessengine.PieceType.*
-import cz.dusanrychnovsky.chessengine.Row.*
+import cz.dusanrychnovsky.chessengine.Square.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -10,127 +9,127 @@ class PieceTypeTest {
 
     @Test
     fun rook_movesHorizontallyAndVertically() {
-        val moves = ROOK.moves(Square(CC, R4));
+        val moves = ROOK.moves(C4);
         assertEquals(
             setOf(
                 // vertically
-                move(CC, R4, CC, R1),
-                move(CC, R4, CC, R2),
-                move(CC, R4, CC, R3),
-                move(CC, R4, CC, R5),
-                move(CC, R4, CC, R6),
-                move(CC, R4, CC, R7),
-                move(CC, R4, CC, R8),
+                move(from= C4, C3, C2, to=C1),
+                move(from=C4, C3, to=C2),
+                move(from=C4, to=C3),
+                move(from=C4, to=C5),
+                move(from=C4, C5, to=C6),
+                move(from=C4, C5, C6, to=C7),
+                move(from=C4, C5, C6, C7, to=C8),
                 // horizontally
-                move(CC, R4, CA, R4),
-                move(CC, R4, CB, R4),
-                move(CC, R4, CD, R4),
-                move(CC, R4, CE, R4),
-                move(CC, R4, CF, R4),
-                move(CC, R4, CG, R4),
-                move(CC, R4, CH, R4)
+                move(from=C4, B4, to=A4),
+                move(from=C4, to=B4),
+                move(from=C4, to=D4),
+                move(from=C4, D4, to=E4),
+                move(from=C4, D4, E4, to=F4),
+                move(from=C4, D4, E4, F4, to=G4),
+                move(from=C4, D4, E4, F4, G4, to=H4)
             ),
             moves)
     }
 
     @Test
     fun bishop_fromCorner_movesDiagonally() {
-        val moves = BISHOP.moves(Square(CA, R1));
+        val moves = BISHOP.moves(A1);
         assertEquals(
             setOf(
                 // up-right
-                move(CA, R1, CB, R2),
-                move(CA, R1, CC, R3),
-                move(CA, R1, CD, R4),
-                move(CA, R1, CE, R5),
-                move(CA, R1, CF, R6),
-                move(CA, R1, CG, R7),
-                move(CA, R1, CH, R8)
+                move(from=A1, to=B2),
+                move(from=A1, B2, to=C3),
+                move(from=A1, B2, C3, to=D4),
+                move(from=A1, B2, C3, D4, to=E5),
+                move(from=A1, B2, C3, D4, E5, to=F6),
+                move(from=A1, B2, C3, D4, E5, F6, to=G7),
+                move(from=A1, B2, C3, D4, E5, F6, G7, to=H8)
             ),
             moves)
     }
 
     @Test
     fun bishop_fromCenter_movesDiagonally() {
-        val moves = BISHOP.moves(Square(CD, R4));
+        val moves = BISHOP.moves(D4);
         assertEquals(
             setOf(
                 // up-right
-                move(CD, R4, CE, R5),
-                move(CD, R4, CF, R6),
-                move(CD, R4, CG, R7),
-                move(CD, R4, CH, R8),
+                move(from=D4, to=E5),
+                move(from=D4, E5, to=F6),
+                move(from=D4, E5, F6, to=G7),
+                move(from=D4, E5, F6, G7, to=H8),
                 // up-left
-                move(CD, R4, CC, R5),
-                move(CD, R4, CB, R6),
-                move(CD, R4, CA, R7),
+                move(from=D4, to=C5),
+                move(from=D4, C5, to=B6),
+                move(from=D4, C5, B6, to=A7),
                 // down-right
-                move(CD, R4, CE, R3),
-                move(CD, R4, CF, R2),
-                move(CD, R4, CG, R1),
+                move(from=D4, to=E3),
+                move(from=D4, E3, to=F2),
+                move(from=D4, E3, F2, to=G1),
                 // down-left
-                move(CD, R4, CC, R3),
-                move(CD, R4, CB, R2),
-                move(CD, R4, CA, R1)
+                move(from=D4, to=C3),
+                move(from=D4, C3, to=B2),
+                move(from=D4, C3, B2, to=A1)
             ),
             moves)
     }
 
     @Test
     fun queen_movesHorizontallyVerticallyAnCDiagonally() {
-        val moves = QUEEN.moves(Square(CD, R4));
+        val moves = QUEEN.moves(D4);
         assertEquals(
             setOf(
                 // vertically
-                move(CD, R4, CD, R1),
-                move(CD, R4, CD, R2),
-                move(CD, R4, CD, R3),
-                move(CD, R4, CD, R5),
-                move(CD, R4, CD, R6),
-                move(CD, R4, CD, R7),
-                move(CD, R4, CD, R8),
+                move(from=D4, D3, D2, to=D1),
+                move(from=D4, D3, to=D2),
+                move(from=D4, to=D3),
+                move(from=D4, to=D5),
+                move(from=D4, D5, to=D6),
+                move(from=D4, D5, D6, to=D7),
+                move(from=D4, D5, D6, D7, to=D8),
                 // horizontally
-                move(CD, R4, CA, R4),
-                move(CD, R4, CB, R4),
-                move(CD, R4, CC, R4),
-                move(CD, R4, CE, R4),
-                move(CD, R4, CF, R4),
-                move(CD, R4, CG, R4),
-                move(CD, R4, CH, R4),
+                move(from=D4, C4, B4, to=A4),
+                move(from=D4, C4, to=B4),
+                move(from=D4, to=C4),
+                move(from=D4, to=E4),
+                move(from=D4, E4, to=F4),
+                move(from=D4, E4, F4, to=G4),
+                move(from=D4, E4, F4, G4, to=H4),
                 // up-right
-                move(CD, R4, CE, R5),
-                move(CD, R4, CF, R6),
-                move(CD, R4, CG, R7),
-                move(CD, R4, CH, R8),
+                move(from=D4, to=E5),
+                move(from=D4, E5, to=F6),
+                move(from=D4, E5, F6, to=G7),
+                move(from=D4, E5, F6, G7, to=H8),
                 // up-left
-                move(CD, R4, CC, R5),
-                move(CD, R4, CB, R6),
-                move(CD, R4, CA, R7),
+                move(from=D4, to=C5),
+                move(from=D4, C5, to=B6),
+                move(from=D4, C5, B6, to=A7),
                 // down-right
-                move(CD, R4, CE, R3),
-                move(CD, R4, CF, R2),
-                move(CD, R4, CG, R1),
+                move(from=D4, to=E3),
+                move(from=D4, E3, to=F2),
+                move(from=D4, E3, F2, to=G1),
                 // down-left
-                move(CD, R4, CC, R3),
-                move(CD, R4, CB, R2),
-                move(CD, R4,CA, R1)
+                move(from=D4, to=C3),
+                move(from=D4, C3, to=B2),
+                move(from=D4, C3, B2, to=A1)
             ),
             moves)
     }
 
     @Test
     fun king_fromCenter_movesOneSquareInAllDirections() {
-        val moves = KING.moves(Square(CD, R4))
+        val moves = KING.moves(D4)
         assertEquals(
             setOf(
-                move(CD, R4, CC, R4), // left
-                move(CD, R4, CE, R4), // right
-                move(CD, R4, CD, R3), // down
-                move(CD, R4, CD, R5), // up
-                move(CD, R4, CC, R3), // down-left
-                move(CD, R4, CE, R3), // down-right
-                move(CD, R4, CC, R5), // up-left
-                move(CD, R4, CE, R5)  // up-right
+                move(from=D4, to=C4), // left
+                move(from=D4, to=E4), // right
+                move(from=D4, to=D3), // down
+                move(from=D4, to=D5), // up
+                move(from=D4, to=C3), // down-left
+                move(from=D4, to=E3), // down-right
+                move(from=D4, to=C5), // up-left
+                move(from=D4, to=E5)  // up-right
             ),
             moves
         )
@@ -138,12 +137,12 @@ class PieceTypeTest {
 
     @Test
     fun king_fromCorner_movesOnlyToValidSquares() {
-        val moves = KING.moves(Square(CA, R1))
+        val moves = KING.moves(A1)
         assertEquals(
             setOf(
-                move(CA, R1, CB, R1), // right
-                move(CA, R1, CA, R2), // up
-                move(CA, R1, CB, R2)  // up-right
+                move(from=A1, to=B1), // right
+                move(from=A1, to=A2), // up
+                move(from=A1, to=B2)  // up-right
             ),
             moves
         )
@@ -151,14 +150,14 @@ class PieceTypeTest {
 
     @Test
     fun king_fromSide_movesOnlyToValidSquares() {
-        val moves = KING.moves(Square(CA, R4))
+        val moves = KING.moves(A4)
         assertEquals(
             setOf(
-                move(CA, R4, CA, R3), // down
-                move(CA, R4, CA, R5), // up
-                move(CA, R4, CB, R3), // down-right
-                move(CA, R4, CB, R4), // right
-                move(CA, R4, CB, R5)  // up-right
+                move(from=A4, to=A3), // down
+                move(from=A4, to=A5), // up
+                move(from=A4, to=B3), // down-right
+                move(from=A4, to=B4), // right
+                move(from=A4, to=B5)  // up-right
             ),
             moves
         )
@@ -166,17 +165,17 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromCenter_movesInLShape() {
-        val moves = KNIGHT.moves(Square(CD, R4))
+        val moves = KNIGHT.moves(D4)
         assertEquals(
             setOf(
-                move(CD, R4, CE, R6), // up 2, right 1
-                move(CD, R4, CC, R6), // up 2, left 1
-                move(CD, R4, CE, R2), // down 2, right 1
-                move(CD, R4, CC, R2), // down 2, left 1
-                move(CD, R4, CF, R5), // right 2, up 1
-                move(CD, R4, CF, R3), // right 2, down 1
-                move(CD, R4, CB, R5), // left 2, up 1
-                move(CD, R4, CB, R3)  // left 2, down 1
+                move(from=D4, to=E6), // up 2, right 1
+                move(from=D4, to=C6), // up 2, left 1
+                move(from=D4, to=E2), // down 2, right 1
+                move(from=D4, to=C2), // down 2, left 1
+                move(from=D4, to=F5), // right 2, up 1
+                move(from=D4, to=F3), // right 2, down 1
+                move(from=D4, to=B5), // left 2, up 1
+                move(from=D4, to=B3)  // left 2, down 1
             ),
             moves
         )
@@ -184,11 +183,11 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromCorner_movesOnlyToValidSquares() {
-        val moves = KNIGHT.moves(Square(CA, R1))
+        val moves = KNIGHT.moves(A1)
         assertEquals(
             setOf(
-                move(CA, R1, CB, R3), // up 2, right 1
-                move(CA, R1, CC, R2)  // right 2, up 1
+                move(from=A1, to=B3), // up 2, right 1
+                move(from=A1, to=C2)  // right 2, up 1
             ),
             moves
         )
@@ -196,18 +195,18 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromSide_movesOnlyToValidSquares() {
-        val moves = KNIGHT.moves(Square(CA, R4))
+        val moves = KNIGHT.moves(A4)
         assertEquals(
             setOf(
-                move(CA, R4, CB, R6), // up 2, right 1
-                move(CA, R4, CB, R2), // down 2, right 1
-                move(CA, R4, CC, R5), // right 2, up 1
-                move(CA, R4, CC, R3)  // right 2, down 1
+                move(from=A4, to=B6), // up 2, right 1
+                move(from=A4, to=B2), // down 2, right 1
+                move(from=A4, to=C5), // right 2, up 1
+                move(from=A4, to=C3)  // right 2, down 1
             ),
             moves
         )
     }
 
-    private fun move(fromColumn: Column, fromRow: Row, toColumn: Column, toRow: Row) =
-        Move(Square(fromColumn, fromRow), Square(toColumn, toRow))
+    private fun move(from: Square, vararg through: Square, to: Square) =
+        Move(from, to, through.toList());
 }
