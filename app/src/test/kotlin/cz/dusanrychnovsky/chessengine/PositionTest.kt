@@ -18,22 +18,35 @@ class PositionTest {
     @Test
     fun isValid_noPieceAtSource_returnsFalse() {
         val position = Position(
+            WHITE,
             mapOf(
                 B3 to WHITE_KING,
                 F5 to BLACK_KING
             )
         )
-
         assertFalse(position.isValid(Move(C2, C4, listOf(C3))))
+    }
+
+    @Test
+    fun isValid_cannotMoveWithOpponentsPieces() {
+        val position  = Position(
+            WHITE,
+            mapOf(
+                B3 to WHITE_KING,
+                F5 to BLACK_KING
+            )
+        )
+        assertFalse(position.isValid(Move(F5, F4, emptyList())))
     }
 
     @Test
     fun isValid_piecesInIsolation() {
         val position = Position(
+            WHITE,
             mapOf(
-                B3 to WHITE_KING,
+                B3 to BLACK_KING,
                 C2 to WHITE_ROOK,
-                F5 to BLACK_KING
+                F5 to WHITE_KING
             )
         )
 
@@ -51,6 +64,7 @@ class PositionTest {
     @Test
     fun isValid_piecesCantJumpOverOtherPieces() {
         val position = Position(
+            WHITE,
             mapOf(
                 B3 to WHITE_KING,
                 C2 to WHITE_ROOK,
@@ -64,6 +78,7 @@ class PositionTest {
     @Test
     fun isValid_knightsCanJumpOverOtherPieces() {
         val position = Position(
+            WHITE,
             mapOf(
                 B3 to WHITE_KING,
                 C2 to WHITE_KNIGHT,
@@ -77,6 +92,7 @@ class PositionTest {
     @Test
     fun isValid_piecesCanCaptureOpponentsPieces() {
         val position = Position(
+            WHITE,
             mapOf(
                 B3 to WHITE_KING,
                 C2 to WHITE_ROOK,
@@ -90,6 +106,7 @@ class PositionTest {
     @Test
     fun isValid_piecesCannotCaptureOwnPieces() {
         val position = Position(
+            WHITE,
             mapOf(
                 B3 to WHITE_KING,
                 C2 to WHITE_ROOK,

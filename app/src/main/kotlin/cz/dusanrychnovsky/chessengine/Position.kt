@@ -1,8 +1,11 @@
 package cz.dusanrychnovsky.chessengine
 
-data class Position(val pieces: Map<Square, Piece>) {
+data class Position(val currentPlayer: Color, val pieces: Map<Square, Piece>) {
     fun isValid(move: Move): Boolean {
         val fromPiece = pieces[move.from] ?: return false
+        if (fromPiece.color != currentPlayer) {
+            return false
+        }
         if (!fromPiece.type.moves(move.from).contains(move)) {
             return false
         }
@@ -17,7 +20,7 @@ data class Position(val pieces: Map<Square, Piece>) {
         if (toPiece != null && toPiece.color == fromPiece.color) {
             return false
         }
-        
+
         return true
     }
 }
