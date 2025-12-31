@@ -1,15 +1,19 @@
 package cz.dusanrychnovsky.chessengine
 
+import cz.dusanrychnovsky.chessengine.Color.*
 import cz.dusanrychnovsky.chessengine.PieceType.*
 import cz.dusanrychnovsky.chessengine.Square.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PieceTypeTest {
+    val EMPTY_POSITION = Position(WHITE, emptyMap())
+    val WHITE_PAWN = Piece(WHITE, PAWN)
+    val BLACK_PAWN = Piece(BLACK, PAWN)
 
     @Test
     fun rook_movesHorizontallyAndVertically() {
-        val moves = ROOK.moves(C4);
+        val moves = ROOK.moves(C4, EMPTY_POSITION)
         assertEquals(
             setOf(
                 // vertically
@@ -34,7 +38,7 @@ class PieceTypeTest {
 
     @Test
     fun bishop_fromCorner_movesDiagonally() {
-        val moves = BISHOP.moves(A1);
+        val moves = BISHOP.moves(A1, EMPTY_POSITION)
         assertEquals(
             setOf(
                 // up-right
@@ -51,7 +55,7 @@ class PieceTypeTest {
 
     @Test
     fun bishop_fromCenter_movesDiagonally() {
-        val moves = BISHOP.moves(D4);
+        val moves = BISHOP.moves(D4, EMPTY_POSITION)
         assertEquals(
             setOf(
                 // up-right
@@ -77,7 +81,7 @@ class PieceTypeTest {
 
     @Test
     fun queen_movesHorizontallyVerticallyAnCDiagonally() {
-        val moves = QUEEN.moves(D4);
+        val moves = QUEEN.moves(D4, EMPTY_POSITION)
         assertEquals(
             setOf(
                 // vertically
@@ -119,7 +123,7 @@ class PieceTypeTest {
 
     @Test
     fun king_fromCenter_movesOneSquareInAllDirections() {
-        val moves = KING.moves(D4)
+        val moves = KING.moves(D4, EMPTY_POSITION)
         assertEquals(
             setOf(
                 move(from=D4, to=C4), // left
@@ -137,7 +141,7 @@ class PieceTypeTest {
 
     @Test
     fun king_fromCorner_movesOnlyToValidSquares() {
-        val moves = KING.moves(A1)
+        val moves = KING.moves(A1, EMPTY_POSITION)
         assertEquals(
             setOf(
                 move(from=A1, to=B1), // right
@@ -150,7 +154,7 @@ class PieceTypeTest {
 
     @Test
     fun king_fromSide_movesOnlyToValidSquares() {
-        val moves = KING.moves(A4)
+        val moves = KING.moves(A4, EMPTY_POSITION)
         assertEquals(
             setOf(
                 move(from=A4, to=A3), // down
@@ -165,7 +169,7 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromCenter_movesInLShape() {
-        val moves = KNIGHT.moves(D4)
+        val moves = KNIGHT.moves(D4, EMPTY_POSITION)
         assertEquals(
             setOf(
                 move(from=D4, to=E6), // up 2, right 1
@@ -183,7 +187,7 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromCorner_movesOnlyToValidSquares() {
-        val moves = KNIGHT.moves(A1)
+        val moves = KNIGHT.moves(A1, EMPTY_POSITION)
         assertEquals(
             setOf(
                 move(from=A1, to=B3), // up 2, right 1
@@ -195,7 +199,7 @@ class PieceTypeTest {
 
     @Test
     fun knight_fromSide_movesOnlyToValidSquares() {
-        val moves = KNIGHT.moves(A4)
+        val moves = KNIGHT.moves(A4, EMPTY_POSITION)
         assertEquals(
             setOf(
                 move(from=A4, to=B6), // up 2, right 1
@@ -207,6 +211,64 @@ class PieceTypeTest {
         )
     }
 
+    @Test
+    fun pawn_white_movesUpOrDiagonally() {
+        val position = Position(WHITE, mapOf(D4 to WHITE_PAWN))
+        val moves = PAWN.moves(D4, position)
+        assertEquals(
+            setOf(
+                move(from=D4, to=D5),
+                move(from=D4, to=C5),
+                move(from=D4, to=E5)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_black_movesDownOrDiagonally() {
+        val position = Position(BLACK, mapOf(D5 to BLACK_PAWN))
+        val moves = PAWN.moves(D5, position)
+        assertEquals(
+            setOf(
+                move(from=D5, to=D4),
+                move(from=D5, to=C4),
+                move(from=D5, to=E4)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_white_fromStartingPosition_movesOneOrTwoSquaresUpOrDiagonally() {
+        val position = Position(WHITE, mapOf(E2 to WHITE_PAWN))
+        val moves = PAWN.moves(E2, position)
+        assertEquals(
+            setOf(
+                move(from=E2, to=E3),
+                move(from=E2, E3, to=E4),
+                move(from=E2, to=D3),
+                move(from=E2, to=F3)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_black_fromStartingPosition_movesOneOrTwoSquaresDownOrDiagonally() {
+        val position = Position(BLACK, mapOf(E7 to BLACK_PAWN))
+        val moves = PAWN.moves(E7, position)
+        assertEquals(
+            setOf(
+                move(from=E7, to=E6),
+                move(from=E7, E6, to=E5),
+                move(from=E7, to=D6),
+                move(from=E7, to=F6)
+            ),
+            moves
+        )
+    }
+
     private fun move(from: Square, vararg through: Square, to: Square) =
-        Move(from, to, through.toList());
+        Move(from, to, through.toList())
 }
