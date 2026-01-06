@@ -5,6 +5,7 @@ import cz.dusanrychnovsky.chessengine.PieceType.*
 import cz.dusanrychnovsky.chessengine.Square.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class PieceTypeTest {
     val EMPTY_POSITION = Position(WHITE, emptyMap())
@@ -212,13 +213,63 @@ class PieceTypeTest {
     }
 
     @Test
-    fun pawn_white_movesUpOrDiagonally() {
+    fun pawn_white_movesUp() {
         val position = Position(WHITE, mapOf(D4 to WHITE_PAWN))
         val moves = PAWN.moves(D4, position)
         assertEquals(
             setOf(
+                move(from=D4, to=D5)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_white_cannotMoveUpWhenBlocked() {
+        val position = Position(WHITE, mapOf(D4 to WHITE_PAWN, D5 to BLACK_PAWN))
+        val moves = PAWN.moves(D4, position)
+        assertTrue(moves.isEmpty())
+    }
+
+    @Test
+    fun pawn_white_fromStartingPosition_movesOneOrTwoSquaresUp() {
+        val position = Position(WHITE, mapOf(E2 to WHITE_PAWN))
+        val moves = PAWN.moves(E2, position)
+        assertEquals(
+            setOf(
+                move(from=E2, to=E3),
+                move(from=E2, E3, to=E4)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_white_fromStartingPosition_cannotMoveUpWhenFirstStepIsBlocked() {
+        val position = Position(WHITE, mapOf(E2 to WHITE_PAWN, E3 to BLACK_PAWN))
+        val moves = PAWN.moves(E2, position)
+        assertTrue(moves.isEmpty())
+    }
+
+    @Test
+    fun pawn_white_fromStartingPosition_cannotMoveTwoSquaresUpWhenSecondStepIsBlocked() {
+        val position = Position(WHITE, mapOf(E2 to WHITE_PAWN, E4 to BLACK_PAWN))
+        val moves = PAWN.moves(E2, position)
+        assertEquals(
+            setOf(
+                move(from=E2, to=E3)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_white_capturesDiagonally() {
+        val position = Position(WHITE, mapOf(D4 to WHITE_PAWN, E5 to BLACK_PAWN))
+        val moves = PAWN.moves(D4, position)
+        assertEquals(
+            setOf(
                 move(from=D4, to=D5),
-                move(from=D4, to=C5),
                 move(from=D4, to=E5)
             ),
             moves
@@ -226,22 +277,8 @@ class PieceTypeTest {
     }
 
     @Test
-    fun pawn_black_movesDownOrDiagonally() {
-        val position = Position(BLACK, mapOf(D5 to BLACK_PAWN))
-        val moves = PAWN.moves(D5, position)
-        assertEquals(
-            setOf(
-                move(from=D5, to=D4),
-                move(from=D5, to=C4),
-                move(from=D5, to=E4)
-            ),
-            moves
-        )
-    }
-
-    @Test
-    fun pawn_white_fromStartingPosition_movesOneOrTwoSquaresUpOrDiagonally() {
-        val position = Position(WHITE, mapOf(E2 to WHITE_PAWN))
+    fun pawn_white_fromStartingPosition_canCapture() {
+        val position = Position(WHITE, mapOf(E2 to WHITE_PAWN, D3 to BLACK_PAWN, F3 to BLACK_PAWN))
         val moves = PAWN.moves(E2, position)
         assertEquals(
             setOf(
@@ -255,8 +292,72 @@ class PieceTypeTest {
     }
 
     @Test
-    fun pawn_black_fromStartingPosition_movesOneOrTwoSquaresDownOrDiagonally() {
+    fun pawn_black_movesDown() {
+        val position = Position(BLACK, mapOf(D5 to BLACK_PAWN))
+        val moves = PAWN.moves(D5, position)
+        assertEquals(
+            setOf(
+                move(from=D5, to=D4)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_black_cannotMoveDownWhenBlocked() {
+        val position = Position(BLACK, mapOf(D5 to BLACK_PAWN, D4 to WHITE_PAWN))
+        val moves = PAWN.moves(D5, position)
+        assertTrue(moves.isEmpty())
+    }
+
+    @Test
+    fun pawn_black_fromStartingPosition_movesOneOrTwoSquaresDown() {
         val position = Position(BLACK, mapOf(E7 to BLACK_PAWN))
+        val moves = PAWN.moves(E7, position)
+        assertEquals(
+            setOf(
+                move(from=E7, to=E6),
+                move(from=E7, E6, to=E5)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_black_fromStartingPosition_cannotMoveDownWhenFirstStepIsBlocked() {
+        val position = Position(BLACK, mapOf(E7 to BLACK_PAWN, E6 to WHITE_PAWN))
+        val moves = PAWN.moves(E7, position)
+        assertTrue(moves.isEmpty())
+    }
+
+    @Test
+    fun pawn_black_fromStartingPosition_cannotMoveTwoSquaresDownWhenSecondStepIsBlocked() {
+        val position = Position(BLACK, mapOf(E7 to BLACK_PAWN, E5 to WHITE_PAWN))
+        val moves = PAWN.moves(E7, position)
+        assertEquals(
+            setOf(
+                move(from=E7, to=E6)
+            ),
+            moves
+        )
+    }
+    
+    @Test
+    fun pawn_black_capturesDiagonally() {
+        val position = Position(BLACK, mapOf(D5 to BLACK_PAWN, E4 to WHITE_PAWN))
+        val moves = PAWN.moves(D5, position)
+        assertEquals(
+            setOf(
+                move(from=D5, to=D4),
+                move(from=D5, to=E4)
+            ),
+            moves
+        )
+    }
+
+    @Test
+    fun pawn_black_fromStartingPosition_canCapture() {
+        val position = Position(BLACK, mapOf(E7 to BLACK_PAWN, D6 to WHITE_PAWN, F6 to WHITE_PAWN))
         val moves = PAWN.moves(E7, position)
         assertEquals(
             setOf(

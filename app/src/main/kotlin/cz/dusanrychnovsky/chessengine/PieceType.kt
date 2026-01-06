@@ -18,21 +18,36 @@ enum class PieceType {
             val color = piece.color
 
             val moves = mutableSetOf<Move>()
-            val (forward, left, right) = when (color) {
+            val (forward, leftCapture, rightCapture) = when (color) {
                 WHITE -> Triple(UP, UP_LEFT, UP_RIGHT)
                 BLACK -> Triple(DOWN, DOWN_LEFT, DOWN_RIGHT)
             }
-            for (direction in setOf(left, right, forward)) {
-                val to = direction(from) ?: continue
-                moves.add(Move(from, to, emptyList()))
+
+            val to = forward(from)
+            if (to != null) {
+                val blocking = position.pieces[to]
+                if (blocking == null) {
+                    moves.add(Move(from, to, emptyList()))
+                }
             }
 
-            val startingRow = when (color) { WHITE -> R2; BLACK -> R7  }
+            for (capture in listOf(leftCapture, rightCapture)) {
+                val to = capture(from)
+                if (to != null) {
+                    val captured = position.pieces[to]
+                    if (captured != null && captured.color != color) {
+                        moves.add(Move(from, to, emptyList()))
+                    }
+                }
+            }
+
+            val startingRow = when (color) { WHITE -> R2; BLACK -> R7 }
             if (from.row == startingRow) {
                 val firstStep = forward(from)
-                val to = firstStep?.let { forward(it) }
-                if (to != null) {
-                    moves.add(Move(from, to, listOf(firstStep)))
+                val secondStep = firstStep?.let { forward(it) }
+                if (firstStep != null && position.pieces[firstStep] == null &&
+                    secondStep != null && position.pieces[secondStep] == null) {
+                    moves.add(Move(from, secondStep, listOf(firstStep)))
                 }
             }
 
