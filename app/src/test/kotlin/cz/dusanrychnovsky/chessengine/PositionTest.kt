@@ -4,6 +4,7 @@ import cz.dusanrychnovsky.chessengine.Color.*
 import cz.dusanrychnovsky.chessengine.PieceType.*
 import cz.dusanrychnovsky.chessengine.Square.*
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -115,5 +116,10 @@ class PositionTest {
             )
         )
         assertFalse(position.isValid(Move(C2, E2, listOf(D2))))
+    }
+
+    @Test
+    fun validMoves_fromInitialPosition() {
+        assertEquals(20, Position.INITIAL.validMoves().size)
     }
 }
