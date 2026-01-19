@@ -7,6 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
 
 class PositionTest {
 
@@ -121,5 +122,86 @@ class PositionTest {
     @Test
     fun validMoves_fromInitialPosition() {
         assertEquals(20, Position.INITIAL.validMoves().size)
+    }
+
+    @Test
+    fun getKingSquare_locatesKings() {
+        val position = Position(
+            WHITE,
+            mapOf(
+                B3 to WHITE_KING,
+                F5 to BLACK_KING
+            )
+        )
+        assertEquals(B3, position.getKingSquare(WHITE))
+        assertEquals(F5, position.getKingSquare(BLACK))
+    }
+
+    @Test
+    fun getKingSquare_whenKingIsMissing_throws() {
+        val position = Position(
+            WHITE,
+            mapOf(
+                B3 to WHITE_ROOK,
+                F5 to BLACK_KING
+            )
+        )
+        assertFailsWith<NoSuchElementException> {
+            position.getKingSquare(WHITE)
+        }
+    }
+
+    @Test
+    fun isCheck_whenKingCanBeCaptured_ReturnsTrue() {
+        val position = Position(
+            BLACK,
+            mapOf(
+                B3 to WHITE_KING,
+                B5 to WHITE_ROOK,
+                F5 to BLACK_KING
+            )
+        )
+        assertTrue(position.isCheck())
+    }
+
+    @Test
+    fun isCheck_whenKingCannotBeCaptured_ReturnsFalse() {
+        val position = Position(
+            BLACK,
+            mapOf(
+                B3 to WHITE_KING,
+                C3 to WHITE_ROOK,
+                F5 to BLACK_KING
+            )
+        )
+        assertFalse(position.isCheck())
+    }
+
+    @Test
+    fun isCheck_whenOwnPieceStandsInTheWay_ReturnsFalse() {
+        val position = Position(
+            BLACK,
+            mapOf(
+                B3 to WHITE_KING,
+                B5 to WHITE_ROOK,
+                E5 to BLACK_BISHOP,
+                F5 to BLACK_KING
+            )
+        )
+        assertFalse(position.isCheck())
+    }
+
+    @Test
+    fun isCheck_whenOpponentsPieceStandsInTheWay_ReturnsFalse() {
+        val position = Position(
+            BLACK,
+            mapOf(
+                B3 to WHITE_KING,
+                B5 to WHITE_ROOK,
+                C5 to WHITE_KNIGHT,
+                F5 to BLACK_KING
+            )
+        )
+        assertFalse(position.isCheck())
     }
 }

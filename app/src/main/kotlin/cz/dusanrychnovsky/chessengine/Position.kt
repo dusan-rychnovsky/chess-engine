@@ -41,6 +41,23 @@ data class Position(val currentPlayer: Color, val pieces: Map<Square, Piece>) {
             .toSet()
     }
 
+    fun isCheck(): Boolean {
+        val opponent = currentPlayer.opposite()
+        val opponentsView = this.copy(currentPlayer = opponent)
+        val kingSquare = opponentsView.getKingSquare(currentPlayer)
+        return pieces
+            .filter { (_, piece) -> piece.color == opponent }
+            .flatMap { (square, piece) -> piece.type.moves(square, opponentsView) }
+            .filter { it.to == kingSquare }
+            .any { opponentsView.isValid(it) }
+    }
+
+    fun getKingSquare(color: Color) : Square {
+        return pieces.entries
+            .first { it.value.color == color && it.value.type == KING }
+            .key
+    }
+
     companion object {
         val INITIAL = Position(
             WHITE,
