@@ -33,6 +33,16 @@ data class Position(val currentPlayer: Color, val pieces: Map<Square, Piece>) {
         return true
     }
 
+    fun apply(move: Move): Position {
+        val piece = pieces[move.from] ?: throw IllegalArgumentException("No piece at ${move.from}.")
+        return Position(
+            currentPlayer.opposite(),
+            pieces
+                .minus(move.from)
+                .plus(move.to to piece)
+        )
+    }
+
     fun validMoves(): Set<Move> {
         return pieces.entries
             .filter { it.value.color == currentPlayer }

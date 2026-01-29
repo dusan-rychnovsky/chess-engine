@@ -204,4 +204,67 @@ class PositionTest {
         )
         assertFalse(position.isCheck())
     }
+
+    @Test
+    fun apply_noPieceAtSquare_throws() {
+        val position = Position(
+            WHITE,
+            mapOf(
+                B3 to WHITE_KING,
+                F5 to BLACK_KING
+            )
+        )
+        assertFailsWith<IllegalArgumentException> {
+            position.apply(Move(C2, C4, listOf(C3)))
+        }
+    }
+
+    @Test
+    fun apply_movesPiece() {
+        val position = Position(
+            WHITE,
+            mapOf(
+                B3 to WHITE_KING,
+                C2 to WHITE_ROOK,
+                F5 to BLACK_KING
+            )
+        )
+        val next = position.apply(Move(C2, C4, listOf(C3)))
+        assertEquals(
+            next,
+            Position(
+                BLACK,
+                mapOf(
+                    B3 to WHITE_KING,
+                    C4 to WHITE_ROOK,
+                    F5 to BLACK_KING
+                )
+            )
+        )
+    }
+
+    @Test
+    fun apply_movesPieceAndCaptures() {
+        val position = Position(
+            WHITE,
+            mapOf(
+                B3 to WHITE_KING,
+                C2 to WHITE_ROOK,
+                C4 to BLACK_BISHOP,
+                F5 to BLACK_KING
+            )
+        )
+        val next = position.apply(Move(C2, C4, listOf(C3)))
+        assertEquals(
+            next,
+            Position(
+                BLACK,
+                mapOf(
+                    B3 to WHITE_KING,
+                    C4 to WHITE_ROOK,
+                    F5 to BLACK_KING
+                )
+            )
+        )
+    }
 }
